@@ -1,0 +1,725 @@
+[
+  {
+    "jobId": "4323",
+    "userId": "501406",
+    "fullName": "Muhammad Taufik Aslam",
+    "email": "muhammadtaufikaslam@gmail.com",
+    "birthPlace": "Jambi",
+    "birthDate": "2001-12-25",
+    "address": "Yogyakarta, DIY",
+    "city": "KOTA YOGYAKARTA",
+    "province": "Yogyakarta",
+    "postCode": "",
+    "country": "indonesia",
+    "phoneNumber": "87782526299",
+    "personalWebsiteUrl": "",
+    "gender": "male",
+    "interest": "Finance/Accounting/Tax",
+    "expectedSalary": "3.500.000",
+    "religion": "Islam",
+    "benefit": "Bonus - Asuransi Ketenagakerjaan",
+    "medical": "",
+    "placement": "",
+    "cv": "https://career.garudafood.co.id/Files/Resume/20250808501406Muhammad%20Taufik%20Aslam-CV%20Professional.pdf",
+    "education": [
+      {
+        "degree": "",
+        "major": "Accountant Profession Education /PPAk",
+        "schoolName": "Universitas Gajah Mada",
+        "dateFrom": "2024-08-11",
+        "dateTo": "2025-06-01",
+        "gpa": 3.48,
+        "description": ""
+      }
+    ],
+    "workExperience": [
+      {
+        "jobTitle": "Audit Staff Seasonal",
+        "companyName": "KAP Muhammad Agung Nugroho & Rekan",
+        "jobLevel": "5. Entry Level/Fresh Graduate",
+        "jobFunction": "Finance - Audit/Taxation",
+        "dateFrom": "2025-01-11",
+        "dateTo": "2025-03-11",
+        "description": "",
+        "lastSalary": "3,500,000"
+      }
+    ]
+  },
+  {
+    "jobId": "4264",
+    "userId": "313378",
+    "fullName": "ADIB HISYAM LATHIF",
+    "email": "lionaladib7@gmail.com",
+    "birthPlace": "surabaya",
+    "birthDate": "2002 - 10 - 28",
+    "address": "Jl. Sikatan VII No.8, RT: 05, RW: 02, Kel: Manukan Wetan, Kec: Tandes",
+    "city": "KOTA SURABAYA",
+    "province": "Jawa Timur",
+    "postCode": "60185",
+    "country": "Indonesia",
+    "phoneNumber": "81353976298",
+    "personalWebsiteUrl": "",
+    "gender": "Male",
+    "interest": "Research & Quality (NPD, QA, QC, Lab Tech), Human Resources, PPIC/Production, Warehouse/Logistics/Supply Chain/Export/Import, ",
+    "expectedSalary": "4500000",
+    "religion": "Islam",
+    "benefit": "mess,bpjs,cuti,akomodasi",
+    "medical": "Halo, Saya seorang freshgraduate, lulusan S1 Perikanan dan Ilmu Kelautan dari Universitas Brawijaya ",
+    "placement": "siap ditempatkan dimana saja",
+    "cv": "",
+    "education": [
+      {
+        "degree": "Bachelor/S1",
+        "major": "perikanan dan ilmu kelautan",
+        "schoolName": "Universitas Brawijaya",
+        "dateFrom": "2020-09-14",
+        "dateTo": "2024-07-26",
+        "gpa": 3.37,
+        "description": ""
+      }
+    ],
+    "workExperience": [
+      {
+        "jobTitle": "MT QC",
+        "companyName": "PT. Bintang Karya Laut ",
+        "jobLevel": "4. Officer/Staff",
+        "jobFunction": "Agriculture/Forestry/Fisheries",
+        "dateFrom": "2025-02-20",
+        "dateTo": "2025-09-25",
+        "description": "",
+        "lastSalary": "5,200,000"
+      },
+      {
+        "jobTitle": "Asisten peneliti ",
+        "companyName": "Universitas Brawijaya ",
+        "jobLevel": "4. Officer/Staff",
+        "jobFunction": "Education",
+        "dateFrom": "2024-01-15",
+        "dateTo": "2024-09-26",
+        "description": "Pengambilan data sampel udang untuk mengetahui stok dan perikanan berkelanjutan ",
+        "lastSalary": "3,000,000"
+      }
+    ]
+  },
+  {
+    "jobId": "3491",
+    "userId": "390947",
+    "fullName": "Anwar  Sadat",
+    "email": "anwarsadat100498@gmail.com",
+    "birthPlace": "Huraba",
+    "birthDate": "1998-04-10",
+    "address": "Jl. Perjuangan no.26A, Medan perjuangan, Kota Medan",
+    "city": "KOTA MEDAN",
+    "province": "Sumatera Utara",
+    "postCode": "20222",
+    "country": "Indonesia",
+    "phoneNumber": "82124705761",
+    "personalWebsiteUrl": "",
+    "gender": "Male",
+    "interest": "",
+    "expectedSalary": "4500000",
+    "religion": "Islam",
+    "benefit": "1000000",
+    "medical": "Saya tidak memiliki riwayat penyakit",
+    "placement": "Bersedia, kota Medan ",
+    "cv": "https://career.garudafood.co.id/Files/Resume/20241115390947Pdf.%20CV.%20anwar.pdf",
+    "education": [
+      {
+        "degree": "",
+        "major": "Ekonomi Syariah",
+        "schoolName": "Universitas Islam Sumatera Utara",
+        "dateFrom": "2022-09-05",
+        "dateTo": "2024-10-11",
+        "gpa": 3.55,
+        "description": ""
+      }
+    ],
+    "workExperience": [
+      {
+        "jobTitle": "Sales Representative",
+        "companyName": "PT. Sinar Niaga sejahtera (Garudafood group)",
+        "jobLevel": "4. Officer/Staff",
+        "jobFunction": "Sales - Retail/General",
+        "dateFrom": "2024-12-07",
+        "dateTo": "2025-08-10",
+        "description": "-mengunjungi outlet dan menjalin hubungan jangka panjang dengan outlet - mencapai target yang sudah diberikan perusahaan ",
+        "lastSalary": "4,000,000"
+      },
+      {
+        "jobTitle": "Business Relation Officer ",
+        "companyName": "PT. BERCA KAWAN SEJATI",
+        "jobLevel": "4. Officer/Staff",
+        "jobFunction": "Sales - Retail/General",
+        "dateFrom": "2023-09-01",
+        "dateTo": "2024-09-28",
+        "description": "-menjual dan memasarkan produk ke retail - mempromosikan dan menjaga hubungan jangka panjang dengan retail ",
+        "lastSalary": "4,200,000"
+      }
+    ]
+  },
+  {
+    "jobId": "4255",
+    "userId": "502033",
+    "fullName": "Salwa Tazkia",
+    "email": "salwatazkia63@gmail.com",
+    "birthPlace": "Jakarta",
+    "birthDate": "2002-11-23",
+    "address": "Jl, Setia Kawan I No. 24 RT 002/ RW 007 Kel. Duri Pulo Kec. Gambir ",
+    "city": "KOTA JAKARTA PUSAT",
+    "province": "Jakarta",
+    "postCode": "10140",
+    "country": "Indonesia",
+    "phoneNumber": "83847712635",
+    "personalWebsiteUrl": "https://www.linkedin.com/in/salwa-tazkia-ab68011b6/",
+    "gender": "Female",
+    "interest": "Human Resources, Marketing, Public Relations, General Affair, ",
+    "expectedSalary": "7000000",
+    "religion": "Islam",
+    "benefit": "Health Insurance",
+    "medical": "No",
+    "placement": "Yes, Jakarta and Bandung",
+    "cv": "https://career.garudafood.co.id/Files/Resume/20250810502033Salwa%20Tazkia%20Fitria%20-%20Safety%20and%20Environment%20Administration%20-%20CV.pdf",
+    "education": [
+      {
+        "degree": "Bachelor/S1",
+        "major": "Kesehatan Masyarakat",
+        "schoolName": "Universitas Islam Negeri Ciputat",
+        "dateFrom": "2020-09-01",
+        "dateTo": "2025-03-16",
+        "gpa": 3.66,
+        "description": "Cumlaude and one of the best graduates "
+      }
+    ],
+    "workExperience": [
+      {
+        "jobTitle": "Safety Administrator",
+        "companyName": "PT PP (Persero) Tbk",
+        "jobLevel": "5. Entry Level/Fresh Graduate",
+        "jobFunction": "Clerical/Administrative Support",
+        "dateFrom": "2025-06-10",
+        "dateTo": "2025-08-10",
+        "description": "",
+        "lastSalary": "7,000,000"
+      }
+    ]
+  },
+  {
+    "jobId": "4264",
+    "userId": "502042",
+    "fullName": "Septian Syekti Wibowo",
+    "email": "septiansyekti33@gmail.com",
+    "birthPlace": "Blora",
+    "birthDate": "2002-09-30",
+    "address": "Ds. Genjahan, Jiken, Blora, Central Java",
+    "city": "KABUPATEN BLORA",
+    "province": "Jawa Tengah",
+    "postCode": "58372",
+    "country": "Indonesia",
+    "phoneNumber": "81802330394",
+    "personalWebsiteUrl": "",
+    "gender": "Male",
+    "interest": "Research & Quality (NPD, QA, QC, Lab Tech), PPIC/Production, Warehouse/Logistics/Supply Chain/Export/Import, Business Development, ",
+    "expectedSalary": "4000000",
+    "religion": "Islam",
+    "benefit": "occupational health and safety guarantees",
+    "medical": "No, I don't have any serious illness",
+    "placement": "Yes, Pati or Gresik",
+    "cv": "https://career.garudafood.co.id/Files/Resume/20250810502042CV_SEPTIAN%20SYEKTI%20WIBOWO_ID.pdf",
+    "education": [
+      {
+        "degree": "Bachelor/S1",
+        "major": "Teknik Perencanaan Wilayah dan Kota",
+        "schoolName": "Universitas Diponegoro",
+        "dateFrom": "2020-08-13",
+        "dateTo": "2025-06-13",
+        "gpa": 3.58,
+        "description": ""
+      }
+    ],
+    "workExperience": [
+      {
+        "jobTitle": "Supervisor Produksi",
+        "companyName": "PT Unggul Jaya Blora",
+        "jobLevel": "3. Asisten Manager/Supervisor/Coordinator",
+        "jobFunction": "Manufacturing/Production Operations",
+        "dateFrom": "2025-06-02",
+        "dateTo": "2025-08-10",
+        "description": "",
+        "lastSalary": "2,500,000"
+      }
+    ]
+  },
+  {
+    "jobId": "4484",
+    "userId": "524064",
+    "fullName": "Alifah Ulya Labibah",
+    "email": "aleefalya@gmail.com",
+    "birthPlace": "BANJARBARU",
+    "birthDate": "2000-04-11",
+    "address": "Jl. Golf Komplek Wengga III Blok. F No. 55 Rt/Rw 14/03, Syamsudin Noor, Liang Anggang",
+    "city": "KOTA BANJAR BARU",
+    "province": "Kalimantan Selatan",
+    "postCode": "70724",
+    "country": "Indonesia",
+    "phoneNumber": "81226917161",
+    "personalWebsiteUrl": "",
+    "gender": "Female",
+    "interest": "Business Development, Marketing, Public Relations, ",
+    "expectedSalary": "4500000",
+    "religion": "Islam",
+    "benefit": "- kesehatan - cuti - fasilitas/support pelatihan untuk pengembangan profesi khususnya data analyst",
+    "medical": "tidak",
+    "placement": "bersedia, selama rencana relokasi tersebut diinformasikan terlebih dahulu",
+    "cv": "https://career.garudafood.co.id/Files/Resume/20250923524064Alifah%20Ulya%20Labibah_Curriculum%20Vitae%20(CV).pdf",
+    "education": [
+      {
+        "degree": "Bachelor/S1",
+        "major": "Statistika",
+        "schoolName": "Universitas Lambung Mangkurat",
+        "dateFrom": "2017-08-18",
+        "dateTo": "2021-08-18",
+        "gpa": 3.53,
+        "description": "1. Juara 1 Lomba Essai Tingkat Nasional (SMA) pada Smart Teen Competition (SMENTION) 2016 2. Juara 1"
+      }
+    ],
+    "workExperience": [
+      {
+        "jobTitle": "Tim Olah Data",
+        "companyName": "Badan Pusat Statistik",
+        "jobLevel": "4. Officer/Staff",
+        "jobFunction": "Others/Category not available",
+        "dateFrom": "2024-10-04",
+        "dateTo": "2025-09-23",
+        "description": " - Berkontribusi dalam pelaksanaan sensus dan survei lapangan serta pengumpulan data terkait  kebutuhan statistik daerah  - Melakukan input dan validasi data ke dalam sistem guna mendukung kualitas dan integritas data",
+        "lastSalary": "4,500,000"
+      },
+      {
+        "jobTitle": "Data Analyst",
+        "companyName": "PT. TRIO MOTOR",
+        "jobLevel": "4. Officer/Staff",
+        "jobFunction": "Marketing/Business Development",
+        "dateFrom": "2022-01-19",
+        "dateTo": "2023-02-01",
+        "description": "  - Membuat dashboard dan laporan visual interaktif untuk memantau KPI dan performa bisnis  secara real time  - Membuat dashboard Customer Profiling, Migration Path, Buying Cycle, dan Data Leads untuk  kebutuhan analisis bisnis dan operasional  - Mengelola, memvalidasi, dan mengolah data 58 dealer di Kalimantan Selatan dan Kalimantan  Tengah serta melakukan interpretasi data yang dapat digunakan sebagai bahan pengambilan  keputusan strategis",
+        "lastSalary": "4,500,000"
+      }
+    ]
+  },
+  {
+    "jobId": "4323",
+    "userId": "306390",
+    "fullName": "Reinhard  Millenius Sitompul",
+    "email": "reinhardmill99@gmail.com",
+    "birthPlace": "Probolinggo",
+    "birthDate": "2000-11-09",
+    "address": "Probolinggo",
+    "city": "KABUPATEN PROBOLINGGO",
+    "province": "Jawa Timur",
+    "postCode": "67282",
+    "country": "Indonesia",
+    "phoneNumber": "82234439118",
+    "personalWebsiteUrl": "",
+    "gender": "Male",
+    "interest": "",
+    "expectedSalary": "",
+    "religion": "Christian",
+    "benefit": "",
+    "medical": "No",
+    "placement": "Yes",
+    "cv": "https://career.garudafood.co.id/Files/Resume/20250609306390CV_REINHARD-MILLENIUS-SITOMPUL.pdf",
+    "education": [
+      {
+        "degree": "Bachelor/S1",
+        "major": "Administrasi Negara",
+        "schoolName": "Universitas Jember",
+        "dateFrom": "2020-09-01",
+        "dateTo": "2024-07-19",
+        "gpa": 3.81,
+        "description": ""
+      }
+    ],
+    "workExperience": [
+      {
+        "jobTitle": "Fasilitator Pendamping",
+        "companyName": "BTPN Syariah",
+        "jobLevel": "5. Entry Level/Fresh Graduate",
+        "jobFunction": "Human Resources",
+        "dateFrom": "2023-02-01",
+        "dateTo": "2023-06-30",
+        "description": "",
+        "lastSalary": "2,800,000"
+      },
+      {
+        "jobTitle": "Marketing Officer",
+        "companyName": "BCA Finance",
+        "jobLevel": "4. Officer/Staff",
+        "jobFunction": "Banking/Financial Services",
+        "dateFrom": "2024-08-01",
+        "dateTo": "2025-08-01",
+        "description": "",
+        "lastSalary": "3,400,000"
+      }
+    ]
+  },
+  {
+    "jobId": "4323",
+    "userId": "331812",
+    "fullName": "Luhur Dewandra",
+    "email": "warwer800@gmail.com",
+    "birthPlace": "KOTA PROBOLINGGO",
+    "birthDate": "1900-01-01",
+    "address": "Perum Gumuk Kembar no. 16, Triwung Kidul, Kademangan, Kota Probolinggo",
+    "city": "KOTA PROBOLINGGO",
+    "province": "Jawa Timur",
+    "postCode": "67224",
+    "country": "Indonesia",
+    "phoneNumber": "81234128681",
+    "personalWebsiteUrl": "",
+    "gender": "Male",
+    "interest": "Human Resources, Warehouse/Logistics/Supply Chain/Export/Import, Marketing, ",
+    "expectedSalary": "",
+    "religion": "Islam",
+    "benefit": "BPJS/Health Insurance",
+    "medical": "No",
+    "placement": "Yes, anywhere in East Java",
+    "cv": "https://career.garudafood.co.id/Files/Resume/20251003331812Luhur%20Dewandra-CV.pdf",
+    "education": [
+      {
+        "degree": "Bachelor/S1",
+        "major": "Sosiologi",
+        "schoolName": "Universitas Airlangga",
+        "dateFrom": "2019-08-12",
+        "dateTo": "2024-06-26",
+        "gpa": 3.52,
+        "description": "Fully satisfactory"
+      }
+    ],
+    "workExperience": [
+      {
+        "jobTitle": "Internship",
+        "companyName": "Dinas Koperasi Usaha Kecil dan Menengah dan Perdag",
+        "jobLevel": "5. Entry Level/Fresh Graduate",
+        "jobFunction": "Others/Category not available",
+        "dateFrom": "2022-11-14",
+        "dateTo": "2022-12-14",
+        "description": "Helping in archiving, printing, and scanning documents for department efficiency. Supported administrative tasks to improve workflow within the team.",
+        "lastSalary": "0"
+      }
+    ]
+  },
+  {
+    "jobId": "4264",
+    "userId": "104055",
+    "fullName": "Jose Armando Manulang",
+    "email": "josearmando.manulang@gmail.com",
+    "birthPlace": "Medan",
+    "birthDate": "1999-12-01",
+    "address": "Jl. Betuah Rt 01 Rw 05 Desa Pangkalan Libut kecamatan Pinggir kabupaten Bengkalis provisi Riau ",
+    "city": "KABUPATEN BENGKALIS",
+    "province": "Riau",
+    "postCode": "28784",
+    "country": "Indonesia",
+    "phoneNumber": "82288457935",
+    "personalWebsiteUrl": "",
+    "gender": "Male",
+    "interest": "Warehouse/Logistics/Supply Chain/Export/Import, ",
+    "expectedSalary": "5 juta - 8 juta ",
+    "religion": "Christian",
+    "benefit": "Tunjangan Kesehatan, tranportasi, makan,jabatan,hari tua",
+    "medical": "Tidak ada ",
+    "placement": "Bersedia. Kota di minati kota Pekanbaru, bali,Manado,Batam ",
+    "cv": "https://career.garudafood.co.id/Files/Resume/20251011104055Lamaran%20Kerja%20Jose%20Armando.pdf",
+    "education": [
+      {
+        "degree": "Bachelor/S1",
+        "major": "Pertanian",
+        "schoolName": "Universitas Lancang Kuning",
+        "dateFrom": "2018-10-05",
+        "dateTo": "2022-07-07",
+        "gpa": 3.47,
+        "description": "Lulus tepat waktu"
+      }
+    ],
+    "workExperience": [
+      {
+        "jobTitle": "Admin weighbridge ",
+        "companyName": "PT Marita Makmur Jaya",
+        "jobLevel": "5. Entry Level/Fresh Graduate",
+        "jobFunction": "Logistics/Supply Chain",
+        "dateFrom": "2022-12-10",
+        "dateTo": "2023-08-10",
+        "description": "Melakukan penimbangan TBS dan pengiriman produk TBS seperti CPO,PKO,CGK,Fibre kepada player  Membuat laporan penerimaan TBS dan pengiriman produk TBS",
+        "lastSalary": "5,000,000"
+      }
+    ]
+  },
+  {
+    "jobId": "3491",
+    "userId": "102096",
+    "fullName": "Indra Samuel Simatupang",
+    "email": "indrasimatupang669@gmail.com",
+    "birthPlace": "Jakarta",
+    "birthDate": "1995-12-01",
+    "address": "JL. Teratai Ujung Dusun IV",
+    "city": "KABUPATEN DELI SERDANG",
+    "province": "Sumatera Utara",
+    "postCode": "20371",
+    "country": "Indonesia",
+    "phoneNumber": "82274029283",
+    "personalWebsiteUrl": "",
+    "gender": "Male",
+    "interest": "Marketing, Sales, Legal, General Affair, ",
+    "expectedSalary": "7000000",
+    "religion": "Christian",
+    "benefit": "BPJS KESEHATAN BPJS KETENAGAKERJAAN",
+    "medical": "Tidak ada",
+    "placement": "Tidak, karena harus menjaga orang tua dan saya lebih suka jika di tempatkan di kota medan",
+    "cv": "https://career.garudafood.co.id/Files/Resume/20250808102096CV%20INDRA%20SAMUEL.pdf",
+    "education": [
+      {
+        "degree": "Bachelor/S1",
+        "major": "Ilmu Hukum",
+        "schoolName": "Universitas HKBP Nommensen",
+        "dateFrom": "2017-09-25",
+        "dateTo": "2021-08-25",
+        "gpa": 3.6,
+        "description": ""
+      }
+    ],
+    "workExperience": [
+      {
+        "jobTitle": "Sales Supervisor",
+        "companyName": "Yakult Indonesia Persada",
+        "jobLevel": "3. Asisten Manager/Supervisor/Coordinator",
+        "jobFunction": "Sales - Retail/General",
+        "dateFrom": "2022-10-04",
+        "dateTo": "2024-10-04",
+        "description": "1.Survey lokasi penjualan dan mempersiapkan peta area penjualan 2.Melakukan uji coba penjualan  3.Merekrut agen penjualan 4.Membina agen penjualan",
+        "lastSalary": "6,000,000"
+      },
+      {
+        "jobTitle": "Credit Marketing Officer",
+        "companyName": "PT. Mega Central Finance",
+        "jobLevel": "4. Officer/Staff",
+        "jobFunction": "Sales - Retail/General",
+        "dateFrom": "2021-09-03",
+        "dateTo": "2022-09-03",
+        "description": "- melakukan survey nasabah - melakukan sosialisasi dengan dealer mobil - menginput data nasabah ke admin finance",
+        "lastSalary": "5,500,000"
+      },
+      {
+        "jobTitle": "Penata Produksi",
+        "companyName": "PT. NUTRIFOOD ",
+        "jobLevel": "4. Officer/Staff",
+        "jobFunction": "Manufacturing/Production Operations",
+        "dateFrom": "2013-08-22",
+        "dateTo": "2014-08-21",
+        "description": "Mengemas produk makanan dan minuman kesehatan dari bubuk sampai kemasan siap edar",
+        "lastSalary": "2,400,000"
+      }
+    ]
+  },
+  {
+    "jobId": "3491",
+    "userId": "105048",
+    "fullName": "Farhan Habib Siregar",
+    "email": "farhanhabibsrg@yahoo.com",
+    "birthPlace": "Medan",
+    "birthDate": "2000-08-04",
+    "address": "Jl.Seser No 18A Medan",
+    "city": "KOTA MEDAN",
+    "province": "Sumatera Utara",
+    "postCode": "20222",
+    "country": "Indonesia",
+    "phoneNumber": "85270266687",
+    "personalWebsiteUrl": "https://www.linkedin.com/in/farhanhabibsiregar",
+    "gender": "Male",
+    "interest": "Warehouse/Logistics/Supply Chain/Export/Import, Business Development, Finance/Accounting/Tax, Information Technology, ",
+    "expectedSalary": "4000000",
+    "religion": "Islam",
+    "benefit": "Insurance, BPJS, Holiday Allowance, Overtime Allowance, Meal Allowance, Transportation Allowance.",
+    "medical": "No",
+    "placement": "Yes",
+    "cv": "https://career.garudafood.co.id/Files/Resume/20250411105048CV%20-%20Farhan%20Habib%20Siregar.pdf",
+    "education": [
+      {
+        "degree": "Bachelor/S1",
+        "major": "Management",
+        "schoolName": "Universitas Harapan Medan",
+        "dateFrom": "2018-09-17",
+        "dateTo": "2022-05-18",
+        "gpa": 3.62,
+        "description": ""
+      }
+    ],
+    "workExperience": [
+      {
+        "jobTitle": "Asset Intern",
+        "companyName": "Badan Pengelola Keuangan dan Aset Daerah Pemerinta",
+        "jobLevel": "5. Entry Level/Fresh Graduate",
+        "jobFunction": "Others/Category not available",
+        "dateFrom": "2021-10-11",
+        "dateTo": "2021-12-03",
+        "description": "1. Responsible for assisting the recapitulation of North Sumatra Provincial Government assets that are still suitable for use or not suitable for use. 2. Responsible for making reports related to the granting of assets to the North Sumatra provincial government. 3. Responsible for helping to recapitulate the assets of the North Sumatra provincial government service.  ",
+        "lastSalary": "0"
+      },
+      {
+        "jobTitle": "Driver Ledger Admin Intern",
+        "companyName": "PT. Belawan Indah",
+        "jobLevel": "5. Entry Level/Fresh Graduate",
+        "jobFunction": "Clerical/Administrative Support",
+        "dateFrom": "2024-02-06",
+        "dateTo": "2024-05-04",
+        "description": "",
+        "lastSalary": "1,000,000"
+      }
+    ]
+  },
+  {
+    "jobId": "4255",
+    "userId": "100138",
+    "fullName": "Viki Triyanto Ramadh",
+    "email": "vikitr172@gmail.com",
+    "birthPlace": "Garut",
+    "birthDate": "1999-01-10",
+    "address": "Koropeak, RT/RW 003/001, Desa Suci Kec Karangpawitan",
+    "city": "KABUPATEN GARUT",
+    "province": "Jawa Barat",
+    "postCode": "44182",
+    "country": "Indonesia",
+    "phoneNumber": "81222659375",
+    "personalWebsiteUrl": "",
+    "gender": "Male",
+    "interest": "Human Resources, PPIC/Production, Warehouse/Logistics/Supply Chain/Export/Import, Engineering, ",
+    "expectedSalary": "5000000",
+    "religion": "Islam",
+    "benefit": "Saya adalah orang yang aktif berinteraksi dengan orang lain karena mengikuti beberapa organisasi bai",
+    "medical": "no",
+    "placement": "yes, Bandung, Karawang, Jakarta, Tangerang",
+    "cv": "https://career.garudafood.co.id/Files/Resume/20251009100138CV_Viki%20Triyanto%20R.pdf",
+    "education": [
+      {
+        "degree": "Bachelor/S1",
+        "major": "Teknik Industri",
+        "schoolName": "Institut Teknologi Garut",
+        "dateFrom": "2017-09-01",
+        "dateTo": "2022-02-06",
+        "gpa": 3.17,
+        "description": ""
+      }
+    ],
+    "workExperience": [
+      {
+        "jobTitle": "Staff QC (Praktik Kerja Nyata)",
+        "companyName": "CV Cantik Plastik",
+        "jobLevel": "5. Entry Level/Fresh Graduate",
+        "jobFunction": "Engineering - Industrial",
+        "dateFrom": "2020-08-01",
+        "dateTo": "2020-08-31",
+        "description": "",
+        "lastSalary": "0"
+      },
+      {
+        "jobTitle": "Salesman \"Garuda\" Sampoerna",
+        "companyName": "Hm Sampoerna",
+        "jobLevel": "4. Officer/Staff",
+        "jobFunction": "Sales - Retail/General",
+        "dateFrom": "2024-05-01",
+        "dateTo": "2024-09-30",
+        "description": "-Menjual Produk Perusahaan -Mencapai Target Penjualan -Mempromosikan Produk kepada konsumen",
+        "lastSalary": "5,500,000"
+      },
+      {
+        "jobTitle": "Team Leader",
+        "companyName": "CV Dinopark Indonesia",
+        "jobLevel": "4. Officer/Staff",
+        "jobFunction": "Public Relations/Communications",
+        "dateFrom": "2025-01-07",
+        "dateTo": "2025-07-31",
+        "description": "-Melayani pelanggan -Membuat laporan harian -Membuat jadwal kegiatan",
+        "lastSalary": "5,500,000"
+      }
+    ]
+  },
+  {
+    "jobId": "4255",
+    "userId": "100512",
+    "fullName": "Niken Ayu Utari",
+    "email": "nikenayuutari30@gmail.com",
+    "birthPlace": "Tanjung Pasir",
+    "birthDate": "2000-03-30",
+    "address": "Huta IV Suhimahasar, Tanjung Pasir",
+    "city": "KABUPATEN SIMALUNGUN",
+    "province": "Sumatera Utara",
+    "postCode": "21181",
+    "country": "Indonesia",
+    "phoneNumber": "82362824228",
+    "personalWebsiteUrl": "",
+    "gender": "Female",
+    "interest": "Human Resources, Business Development, Finance/Accounting/Tax, General Affair, ",
+    "expectedSalary": "5000000",
+    "religion": "Islam",
+    "benefit": "BPJS ketenagakerjaan dan kesehatan, cuti, THR, dan bonus lain lain, serta pelatihan pengembangan peg",
+    "medical": "tidak",
+    "placement": "Medan",
+    "cv": "https://career.garudafood.co.id/Files/Resume/20250717100512CV%20Niken%20Ayu%20Utari.pdf",
+    "education": [
+      {
+        "degree": "Bachelor/S1",
+        "major": "Akuntansi/ Keuangan dan Perbankan Syariah",
+        "schoolName": "Politeknik Negeri Medan",
+        "dateFrom": "2018-08-01",
+        "dateTo": "2022-08-01",
+        "gpa": 3.67,
+        "description": "\"Lulus cumlaude dengan IPK 3,67 dari skala 4,00, dengan jurusan Keuangan dan Perbankan Syariah – sec"
+      }
+    ],
+    "workExperience": [
+      {
+        "jobTitle": "Desk Collection",
+        "companyName": "PT Bank Mandiri",
+        "jobLevel": "5. Entry Level/Fresh Graduate",
+        "jobFunction": "Banking/Financial Services",
+        "dateFrom": "2023-12-04",
+        "dateTo": "2024-10-01",
+        "description": "Konsisten mencapai 138% dari target bulanan selama 3 bulan berturut-turut (Juni - Agustus 2024).",
+        "lastSalary": "5,000,000"
+      }
+    ]
+  },
+  {
+    "jobId": "4484",
+    "userId": "540313",
+    "fullName": "Aulia Hasanah Nur Rahman",
+    "email": "lia.hasanah001@gmail.com",
+    "birthPlace": "Bekasi",
+    "birthDate": "2001-09-26",
+    "address": "Pondok Hijau Permai",
+    "city": "KOTA BEKASI",
+    "province": "Jawa Barat",
+    "postCode": "17115",
+    "country": "Indonesia",
+    "phoneNumber": "6281212989903",
+    "personalWebsiteUrl": "",
+    "gender": "Female",
+    "interest": "Warehouse/Logistics/Supply Chain/Export/Import, Business Development, PDCA, ",
+    "expectedSalary": "6500000",
+    "religion": "Islam",
+    "benefit": "ALLOWANCES: MEALS + TRANSPORTATION; OTHER BENEFITS: BPJS EMPLOYMENT, PROJECT BONUS, COMMUNICATION, O",
+    "medical": "No",
+    "placement": "Yes. I'm interested to be located in Surabaya/Malang/Jakarta",
+    "cv": "https://career.garudafood.co.id/Files/Resume/20251016540313CV-%20Aulia%20R.pdf",
+    "education": [
+      {
+        "degree": "Bachelor/S1",
+        "major": "Statistics",
+        "schoolName": "Universitas Padjadjaran",
+        "dateFrom": "2021-08-30",
+        "dateTo": "2025-02-12",
+        "gpa": 3.47,
+        "description": ""
+      }
+    ],
+    "workExperience": []
+  }
+]

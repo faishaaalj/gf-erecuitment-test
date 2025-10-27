@@ -1,0 +1,329 @@
+def get_dummy_job_details(job_id: str) -> dict:
+    """
+    Simulates fetching job details from an API by returning a hardcoded JSON object
+    from a list of jobs.
+    """
+    dummy_jobs_list = [
+        {
+            "header": {
+            "jobId": "4323",
+            "jobTitle": "Sales Representative Retailer Bima",
+            "companyId": "SNS",
+            "companyOffice": "DEPO JEMBER",
+            "createdDate": "2025-09-22"
+            },
+            "requirements": {
+            "description": "Berpengalaman dibidang Sales/Marketing FMCG, Memiliki SIM C dan kendaraan pribadi, Good Communication Skill, Negotiation skill, Displin, berorientasi pada target dan cepat beradaptasi, Memiliki analisa kerja yang kuat",
+            "scoreContribution": 10
+            },
+            "responsibilities": {
+            "description": "Melakukan kunjungan ke toko, Melakukan order ke toko, Melakukan penagihan ke toko, Pemerataan product, Pemajangan product, Cek Stock dan barang rusak/exd, Membuat perencaan harian dsb.",
+            "scoreContribution": 20
+            },
+            "items": [
+            {
+                "categoryName": "Major",
+                "value": "Semua Jurusan",
+                "scoreContribution": 15
+            },
+            {
+                "categoryName": "Year of Experience",
+                "value": "Diploma",
+                "scoreContribution": 30
+            },
+            {
+                "categoryName": "Category Position",
+                "value": "Sales",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Work Location",
+                "value": "Jember",
+                "scoreContribution": 20
+            },
+            {
+                "categoryName": "Employee Status",
+                "value": "PKWTT (Permanent)",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Job Fields",
+                "value": "Sales / Marketing FMCG",
+                "scoreContribution": 40
+            },
+            {
+                "categoryName": "Age (Min)",
+                "value": "22",
+                "scoreContribution": 25
+            },
+            {
+                "categoryName": "Age (Max)",
+                "value": "35",
+                "scoreContribution": 25
+            }
+            ]
+        },
+        {
+            "header": {
+            "jobId": "4264",
+            "jobTitle": "Management Trainee - Research & Development",
+            "companyId": "GPPJ-HO",
+            "companyOffice": "GPPJ-HO",
+            "createdDate": "2025-07-14"
+            },
+            "requirements": {
+            "description": "Minimum Bachelor’s Degree in Food Technology, Food Engineering, Culinary Art with a minimum GPA of 3.00, Fresh graduates are welcome to apply, Excellent analytical & problem-solving skills, Demonstrates structured thinking and logical reasoning, Strong communication and interpersonal skills, Strong leadership and ability to work well in a team, Demonstrates strong learning agility, Fluent in English, both verbal and written, Willing to be placed in various locations across Indonesia. ",
+            "scoreContribution": 10
+            },
+            "responsibilities": {
+            "description": "Our Management Trainee Program is designed to nurture and develop future leaders across key business functions, with potential exposure to the Research & Development Division. An accelerated program to develop the company's future leaders. Insightful in-class learning experiences. Valuable mentoring across various business processes",
+            "scoreContribution": 20
+            },
+            "items": [
+            {
+                "categoryName": "Major",
+                "value": "Food Technology, Food Engineering, Culinary Art",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Country",
+                "value": "",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "City",
+                "value": "",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Employment Type",
+                "value": "Contract",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Position Level",
+                "value": "Entry Level",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Year of Experience",
+                "value": "Max 2 year",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Education Level",
+                "value": "Bachelor Degree",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Job Function",
+                "value": "Research & Development",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Work Location",
+                "value": "Placement across Indonesia",
+                "scoreContribution": 0
+            }
+            ]
+        },
+        {
+            "header": {
+            "jobId": "3491",
+            "jobTitle": "Sales Representative Retailer Arjuna",
+            "companyId": "SNS",
+            "companyOffice": "DEPO MEDAN",
+            "createdDate": "2024-12-02"
+            },
+            "requirements": {
+            "description": "- Menguasai Microsoft Office : Word dan Excel,  Skill komunikasi dan interpersonal yang baik,  Memiliki Surat Izin Mengemudi Aktif ( Min SIM C ), Memiliki passion dibidang marketing, Mampu bekerja sama dengan team, Energik, disiplin & jujur",
+            "scoreContribution": 10
+            },
+            "responsibilities": {
+            "description": "- Menjual semua produk termasuk yang  pareto maupun non pareto pada semua outlet di cabangnya sesuai dengan policy penjualan. Melakukan kunjungan penjualan kepada langganan secara teratur sesuai dengan rencana kunjungan harian yang telah dibakukan.  - Melakukan order barang ke gudang dan memastikan barang telah terkirim ke outlet.  - Menjamin product availability/pemerataan produk pada semua pelanggan dan outlet sesuai potensinya di masing-masing cabang.  - Melakukan pemajangan / display produk exist dan produk baru yang baik di outlet-outlet.  - Memperkenalkan dan menjaga nama baik dari perusahaan kepada langganan dan masyarakat.  - Membina dan memelihara hubungan baik dengan para langganan.  - Menarik dan menukar barang rusak/expired di cabangnya",
+            "scoreContribution": 20
+            },
+            "items": [
+            {
+                "categoryName": "Major",
+                "value": "All Major",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Year of Experience",
+                "value": "0",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Education Level",
+                "value": "Bachelor",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Category Position",
+                "value": "Sales",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Work Location",
+                "value": "Medan",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Employee Status",
+                "value": "PKWTT (Permanent)",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Job Fields",
+                "value": "",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Age (Min)",
+                "value": "20",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Age (Max)",
+                "value": "30",
+                "scoreContribution": 0
+            }
+            ]
+        },
+        {
+            "header": {
+            "jobId": "4255",
+            "jobTitle": "Management Trainee - Supply Chain Management",
+            "companyId": "SNS",
+            "companyOffice": "SNS-HO",
+            "createdDate": "2025-07-14"
+            },
+            "requirements": {
+            "description": "Bachelor's Degree from Any Discipline with a minimum GPA of 3.00, Fresh graduates are welcome to apply, Excellent analytical & problem-solving skills, Demonstrates structured thinking and logical reasoning, Strong communication and interpersonal skills, Strong leadership and ability to work well in a team, Demonstrates strong learning agility, Fluent in English, both verbal and written, Willing to be placed in various locations across Indonesia",
+            "scoreContribution": 10
+            },
+            "responsibilities": {
+            "description": "Our Management Trainee Program is designed to nurture and develop future leaders across key business functions, with potential exposure to the Research & Development Division. An accelerated program to develop the company's future leaders. Insightful in-class learning experiences. Valuable mentoring across various business processes  ",
+            "scoreContribution": 20
+            },
+            "items": [
+            {
+                "categoryName": "Major",
+                "value": "Any Discipline",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Country",
+                "value": "",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "City",
+                "value": "",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Employment Type",
+                "value": "Contract",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Position Level",
+                "value": "Entry Level",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Year of Experience",
+                "value": "Max 2 year",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Education Level",
+                "value": "Bachelor Degree",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Job Function",
+                "value": "Supply Chain Management",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Work Location",
+                "value": "Placement across Indonesia",
+                "scoreContribution": 0
+            }
+            ]
+        },
+        {
+            "header": {
+            "jobId": "4484",
+            "jobTitle": "Sales & Market Development Analyst",
+            "companyId": "SNS",
+            "companyOffice": "REGION KALIMANTAN",
+            "createdDate": "2025-10-16"
+            },
+            "requirements": {
+            "description": "Maintanance & Support Application",
+            "scoreContribution": 10
+            },
+            "responsibilities": {
+            "description": "Develop New Application",
+            "scoreContribution": 20
+            },
+            "items": [
+            {
+                "categoryName": "Major",
+                "value": "-",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Year of Experience",
+                "value": "0",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Education Level",
+                "value": "Diploma",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Category Position",
+                "value": "Non Sales",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Work Location",
+                "value": "Banjarmasin",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Employee Status",
+                "value": "PKWTT (Permanent)",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Job Fields",
+                "value": "",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Age (Min)",
+                "value": "18",
+                "scoreContribution": 0
+            },
+            {
+                "categoryName": "Age (Max)",
+                "value": "30",
+                "scoreContribution": 0
+            }
+            ]
+        }
+    ]
+    
+    for job in dummy_jobs_list:
+        if job.get("header", {}).get("jobId") == job_id:
+            return job
+            
+    return {} 
+

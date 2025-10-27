@@ -1,0 +1,46 @@
+{
+  "jobId": "4323",
+  "candidateId": "8888",
+  "fullName": "Muhammad Taufik Aslam",
+  "email": "muhammadtaufikaslam@gmail.com",
+  "birthPlace": "Jambi",
+  "birthDate": "2001-12-25",
+  "address": "Yogyakarta, DIY",
+  "city": "KOTA YOGYAKARTA",
+  "province": "Yogyakarta",
+  "postCode": "",
+  "country": "Indonesia",
+  "phoneNumber": "087782526299",
+  "personalWebsiteUrl": "",
+  "gender": "Male",
+  "interest": "Finance/Accounting/Tax, ",
+  "expectedSalary": "3.500.000",
+  "religion": "Islam",
+  "benefit": "- Bonus - Asuransi Ketenagakerjaan",
+  "medical": "",
+  "placement": "",
+  "cv": "https://career.garudafood.co.id/Files/Resume/20250808501406Muhammad%20Taufik%20Aslam-CV%20Professional.pdf",
+  "education": [
+    {
+      "degree": "",
+      "major": "Accountant Profession Education /PPAk",
+      "schoolName": "Universitas Gajah Mada",
+      "dateFrom": "2024-08-11",
+      "dateTo": "2025-06-01",
+      "gpa": 3.48,
+      "description": ""
+    }
+  ],
+  "workExperience": [
+    {
+      "jobTitle": "Audit Staff Seasonal",
+      "companyName": "KAP Muhammad Agung Nugroho & Rekan",
+      "jobLevel": "5. Entry Level/Fresh Graduate",
+      "jobFunction": "Finance - Audit/Taxation",
+      "dateFrom": "2025-01-11",
+      "dateTo": "2025-03-11",
+      "description": "",
+      "lastSalary": "3,500,000"
+    }
+  ]
+}
