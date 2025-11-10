@@ -134,16 +134,29 @@ def format_candidate_details_for_prompt(candidate_data: dict) -> str:
     details = []
     logger.debug(f"Formatting candidate data for prompt: {candidate_data.get('candidateId', 'N/A')}")
 
-
-    details.append(f"- Candidate ID: {candidate_data.get('candidateId', 'N/A')}")
-    details.append(f"- Name: {candidate_data.get('fullName', 'N/A')}") # Use 'fullName'
+    details.append(f"--- Candidate Profile: {candidate_data.get('candidateId', 'N/A')} ---")
+    details.append(f"- Name: {candidate_data.get('fullName', 'N/A')}")
     details.append(f"- Email: {candidate_data.get('email', 'N/A')}")
-    details.append(f"- Phone: {candidate_data.get('phoneNumber', 'N/A')}") # Use 'phoneNumber'
-    details.append(f"- Location: {candidate_data.get('city', 'N/A')}")
-    details.append(f"- Address: {candidate_data.get('address', 'N/A')}")
-    # Add other potentially relevant fields if available in candidate_data
+    details.append(f"- Phone: {candidate_data.get('phoneNumber', 'N/A')}")
+    
+    details.append("\nPersonal & Location Details:")
     details.append(f"- Gender: {candidate_data.get('gender', 'N/A')}")
+    details.append(f"- Religion: {candidate_data.get('religion', 'N/A')}")
     details.append(f"- Birth Date: {candidate_data.get('birthDate', 'N/A')}")
+    details.append(f"- Birth Place: {candidate_data.get('birthPlace', 'N/A')}")
+    details.append(f"- Address: {candidate_data.get('address', 'N/A')}")
+    details.append(f"- City: {candidate_data.get('city', 'N/A')}")
+    details.append(f"- Province: {candidate_data.get('province', 'N/A')}")
+    details.append(f"- Country: {candidate_data.get('country', 'N/A')}")
+    details.append(f"- Post Code: {candidate_data.get('postCode', 'N/A')}")
+    details.append(f"- Personal Website: {candidate_data.get('personalWebsiteUrl', 'N/A')}")
+    
+    details.append("\nPreferences & Other:")
+    details.append(f"- Expected Salary: {candidate_data.get('expectedSalary', 'N/A')}")
+    details.append(f"- Expected Benefit: {candidate_data.get('benefit', 'N/A')}")
+    details.append(f"- Interests: {candidate_data.get('interest', 'N/A')}")
+    details.append(f"- Medical Notes: {candidate_data.get('medical', 'N/A')}")
+    details.append(f"- Placement Notes: {candidate_data.get('placement', 'N/A')}")
 
 
     # Format Education History

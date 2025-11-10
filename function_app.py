@@ -35,10 +35,11 @@ async def http_submit_cv_starter(req: func.HttpRequest, client: df.DurableOrches
     logging.info('HTTP Starter: submit-cv request received.')
     try:
         candidate_data = req.get_json()
-        # Basic validation
-        if not all(k in candidate_data for k in ["jobId", "cv", "candidateId"]):
-             logging.warning("HTTP Starter: Missing required fields in submit-cv request.")
-             return func.HttpResponse("Missing required fields: jobId, cv, candidateId", status_code=400)
+        # Basic validation - check if fields exist and are not empty
+        required_fields = ["jobId", "cv", "candidateId"]
+        if not all(k in candidate_data and candidate_data.get(k) for k in required_fields):
+             logging.warning("HTTP Starter: Missing or empty required fields in submit-cv request.")
+             return func.HttpResponse("Missing or empty required fields: jobId, cv, candidateId", status_code=400)
 
         instance_id = await client.start_new(
             orchestration_function_name="ApplicationProcessingOrchestrator",
@@ -121,13 +122,27 @@ def ApplicationProcessingOrchestrator(context: df.DurableOrchestrationContext):
             "name": orchestration_input.get("fullName"), "email": orchestration_input.get("email"),
             "phone": orchestration_input.get("phoneNumber"),
             "submissionDate": context.current_utc_datetime.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z",
+            "birthDate": orchestration_input.get("birthDate"),
+            "birthPlace": orchestration_input.get("birthPlace"),
+            "address": orchestration_input.get("address"),
+            "province": orchestration_input.get("province"),
+            "postCode": orchestration_input.get("postCode"),
+            "country": orchestration_input.get("country"),
+            "personalWebsiteUrl": orchestration_input.get("personalWebsiteUrl"),
+            "gender": orchestration_input.get("gender"),
+            "interest": orchestration_input.get("interest"),
+            "religion": orchestration_input.get("religion"),
+            "medical": orchestration_input.get("medical"),
+            "placement": orchestration_input.get("placement"),
+            "expectedSalary": orchestration_input.get("expectedSalary"),
+            "benefit": orchestration_input.get("benefit"),
             "cvUrl": cv_url, "aiScore": final_score, "aiReasoning": final_reasoning,
             "location": { "city": orchestration_input.get("city") },
             "education": orchestration_input.get("education", []),
             "workExperience": orchestration_input.get("workExperience", []),
             "cvContent": cv_content, "profileSummary": embeddings.get("profileSummaryText", ""),
             "profileSummaryVector": embeddings.get("profileSummaryVector", []),
-            "cvContentVector": embeddings.get("cvContentVector", [])
+            "cvContentVector": embeddings.get("cvContentVector", []),
         }
 
         logging.info(f"Orchestrator ({instance_id}): Calling IndexApplicationActivity.")
@@ -381,7 +396,10 @@ async def http_update_profile_starter(req: func.HttpRequest, client: df.DurableO
         jobs_applied_list = updated_candidate_data.get('jobsApplied')
         new_cv_url = updated_candidate_data.get('cv')
 
-        if not candidate_id or not isinstance(jobs_applied_list, list) or not new_cv_url:
+        
+        if (not candidate_id or candidate_id.strip() == "" or 
+            jobs_applied_list is None or not isinstance(jobs_applied_list, list) or 
+            not new_cv_url or new_cv_url.strip() == ""):
             logging.warning("HTTP Starter: Missing or invalid fields in update_profile request.")
             return func.HttpResponse("Missing or invalid fields: candidateId (string), jobsApplied (list), cv (URL)", status_code=400)
 
@@ -573,6 +591,20 @@ def RescoreApplicationActivity(inputData: Dict[str, Any]) -> Optional[Dict[str, 
             "workExperience": updated_candidate_data.get("workExperience", []),
             "cvUrl": updated_candidate_data.get("cv"),
             "cvContent": updated_candidate_data.get('cvContent'),
+            "birthDate": updated_candidate_data.get("birthDate"),
+            "birthPlace": updated_candidate_data.get("birthPlace"),
+            "address": updated_candidate_data.get("address"),
+            "province": updated_candidate_data.get("province"),
+            "postCode": updated_candidate_data.get("postCode"),
+            "country": updated_candidate_data.get("country"),
+            "personalWebsiteUrl": updated_candidate_data.get("personalWebsiteUrl"),
+            "gender": updated_candidate_data.get("gender"),
+            "interest": updated_candidate_data.get("interest"),
+            "religion": updated_candidate_data.get("religion"),
+            "medical": updated_candidate_data.get("medical"),
+            "placement": updated_candidate_data.get("placement"),
+            "expectedSalary": updated_candidate_data.get("expectedSalary"),
+            "benefit": updated_candidate_data.get("benefit"),
             "profileSummary": new_embeddings.get("profileSummaryText", ""),
             "profileSummaryVector": new_embeddings.get("profileSummaryVector", []),
             "cvContentVector": new_embeddings.get("cvContentVector", []),
