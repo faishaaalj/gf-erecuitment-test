@@ -11,18 +11,23 @@ from typing import List, Dict, Any, Optional
 
 from helper_functions import services
 from helper_functions.data_processing import format_candidate_details_for_prompt, format_job_details_for_prompt, _create_safe_dict_key, clean_html
-from helper_functions.data_models import get_dummy_job_details
+# from helper_functions.data_models import get_dummy_job_details
+from helper_functions.job_api_client import get_job_details
 from helper_functions.component import _find_existing_application, get_ai_score, summarize_candidate_for_table, generate_embedding
 
 bp = df.Blueprint()
 
 @bp.activity_trigger(input_name="jobId")
-def GetJobDetailsActivity(jobId: str) -> Optional[dict]:
-    """Activity function to get job details."""
-    logging.info(f"Activity: Getting job details for {jobId}")
-    details = get_dummy_job_details(jobId)
+async def GetJobDetailsActivity(jobId: str) -> Optional[dict]:
+    """
+    Activity function to get job details from the live API.
+    Handles auth token caching and retrieval.
+    """
+    logging.info(f"Activity: Getting job details for {jobId} from live API.")
+
+    details = await get_job_details(jobId)
     if not details:
-        logging.warning(f"Activity: Job details not found for {jobId}")
+        logging.warning(f"Activity: Job details not found for {jobId}.")
     return details
 
 @bp.route(route="apply_job")
