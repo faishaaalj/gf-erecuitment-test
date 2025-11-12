@@ -1,7 +1,7 @@
 [
   {
     "jobId": "4323",
-    "userId": "501406",
+    "candidateId": "501406",
     "fullName": "Muhammad Taufik Aslam",
     "email": "muhammadtaufikaslam@gmail.com",
     "birthPlace": "Jambi",
@@ -47,7 +47,7 @@
   },
   {
     "jobId": "4264",
-    "userId": "313378",
+    "candidateId": "313378",
     "fullName": "ADIB HISYAM LATHIF",
     "email": "lionaladib7@gmail.com",
     "birthPlace": "surabaya",
@@ -103,7 +103,7 @@
   },
   {
     "jobId": "3491",
-    "userId": "390947",
+    "candidateId": "390947",
     "fullName": "Anwar  Sadat",
     "email": "anwarsadat100498@gmail.com",
     "birthPlace": "Huraba",
@@ -159,7 +159,7 @@
   },
   {
     "jobId": "4255",
-    "userId": "502033",
+    "candidateId": "502033",
     "fullName": "Salwa Tazkia",
     "email": "salwatazkia63@gmail.com",
     "birthPlace": "Jakarta",
@@ -205,7 +205,7 @@
   },
   {
     "jobId": "4264",
-    "userId": "502042",
+    "candidateId": "502042",
     "fullName": "Septian Syekti Wibowo",
     "email": "septiansyekti33@gmail.com",
     "birthPlace": "Blora",
@@ -251,7 +251,7 @@
   },
   {
     "jobId": "4484",
-    "userId": "524064",
+    "candidateId": "524064",
     "fullName": "Alifah Ulya Labibah",
     "email": "aleefalya@gmail.com",
     "birthPlace": "BANJARBARU",
@@ -307,7 +307,7 @@
   },
   {
     "jobId": "4323",
-    "userId": "306390",
+    "candidateId": "306390",
     "fullName": "Reinhard  Millenius Sitompul",
     "email": "reinhardmill99@gmail.com",
     "birthPlace": "Probolinggo",
@@ -363,7 +363,7 @@
   },
   {
     "jobId": "4323",
-    "userId": "331812",
+    "candidateId": "331812",
     "fullName": "Luhur Dewandra",
     "email": "warwer800@gmail.com",
     "birthPlace": "KOTA PROBOLINGGO",
@@ -409,7 +409,7 @@
   },
   {
     "jobId": "4264",
-    "userId": "104055",
+    "candidateId": "104055",
     "fullName": "Jose Armando Manulang",
     "email": "josearmando.manulang@gmail.com",
     "birthPlace": "Medan",
@@ -455,7 +455,7 @@
   },
   {
     "jobId": "3491",
-    "userId": "102096",
+    "candidateId": "102096",
     "fullName": "Indra Samuel Simatupang",
     "email": "indrasimatupang669@gmail.com",
     "birthPlace": "Jakarta",
@@ -521,7 +521,7 @@
   },
   {
     "jobId": "3491",
-    "userId": "105048",
+    "candidateId": "105048",
     "fullName": "Farhan Habib Siregar",
     "email": "farhanhabibsrg@yahoo.com",
     "birthPlace": "Medan",
@@ -577,7 +577,7 @@
   },
   {
     "jobId": "4255",
-    "userId": "100138",
+    "candidateId": "100138",
     "fullName": "Viki Triyanto Ramadh",
     "email": "vikitr172@gmail.com",
     "birthPlace": "Garut",
@@ -643,7 +643,7 @@
   },
   {
     "jobId": "4255",
-    "userId": "100512",
+    "candidateId": "100512",
     "fullName": "Niken Ayu Utari",
     "email": "nikenayuutari30@gmail.com",
     "birthPlace": "Tanjung Pasir",
@@ -689,7 +689,7 @@
   },
   {
     "jobId": "4484",
-    "userId": "540313",
+    "candidateId": "540313",
     "fullName": "Aulia Hasanah Nur Rahman",
     "email": "lia.hasanah001@gmail.com",
     "birthPlace": "Bekasi",
