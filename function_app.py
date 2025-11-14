@@ -114,6 +114,22 @@ def ApplicationProcessingOrchestrator(context: df.DurableOrchestrationContext):
         logging.info(f"Orchestrator ({instance_id}): Scoring complete. Score: {final_score}")
         # --- ADJUSTMENT END ---
 
+        # Step 4.5: Check if score meets minimum threshold
+        import os
+        score_threshold = float(os.getenv("AI_SCORE_THRESHOLD", "0.0"))
+        if final_score < score_threshold:
+            logging.info(f"Orchestrator ({instance_id}): Score {final_score} is below threshold {score_threshold}. Skipping indexing.")
+            # If updating existing application, delete it from index
+            if existing_application_id:
+                logging.info(f"Orchestrator ({instance_id}): Deleting existing application {application_id} from index.")
+                delete_result = yield context.call_activity("DeleteApplicationActivity", {"applicationId": application_id})
+                if delete_result and delete_result.get("success"):
+                    return {"status": "Completed", "applicationId": application_id, "score": final_score, "indexed": False, "operation": "deleted"}
+                else:
+                    return {"status": "Completed", "applicationId": application_id, "score": final_score, "indexed": False, "operation": "delete_failed"}
+            else:
+                return {"status": "Completed", "applicationId": application_id, "score": final_score, "indexed": False, "operation": "skipped"}
+
         # Step 5: Generate Embeddings
         logging.info(f"Orchestrator ({instance_id}): Calling GenerateEmbeddingsActivity.")
         embedding_input = {"candidate_data": orchestration_input}
@@ -122,17 +138,17 @@ def ApplicationProcessingOrchestrator(context: df.DurableOrchestrationContext):
 
         # Step 6: Prepare and Index Document
         logging.info(f"Orchestrator ({instance_id}): Preparing final document.")
+        # Extract jobTitle from job_details
+        job_title = job_details.get("header", {}).get("jobTitle", "")
+        
         application_document = {
             "applicationId": application_id, "candidateId": candidate_id, "jobId": job_id,
+            "jobTitle": job_title,
             "name": orchestration_input.get("fullName"), "email": orchestration_input.get("email"),
             "phone": orchestration_input.get("phoneNumber"),
             "submissionDate": context.current_utc_datetime.strftime("%Y-%m-%dT%H:%M:%S.%f")[:-3] + "Z",
             "birthDate": orchestration_input.get("birthDate"),
             "birthPlace": orchestration_input.get("birthPlace"),
-            "address": orchestration_input.get("address"),
-            "province": orchestration_input.get("province"),
-            "postCode": orchestration_input.get("postCode"),
-            "country": orchestration_input.get("country"),
             "personalWebsiteUrl": orchestration_input.get("personalWebsiteUrl"),
             "gender": orchestration_input.get("gender"),
             "interest": orchestration_input.get("interest"),
@@ -142,7 +158,13 @@ def ApplicationProcessingOrchestrator(context: df.DurableOrchestrationContext):
             "expectedSalary": orchestration_input.get("expectedSalary"),
             "benefit": orchestration_input.get("benefit"),
             "cvUrl": cv_url, "aiScore": final_score, "aiReasoning": final_reasoning,
-            "location": { "city": orchestration_input.get("city") },
+            "location": {
+                "address": orchestration_input.get("address"),
+                "city": orchestration_input.get("city"),
+                "province": orchestration_input.get("province"),
+                "country": orchestration_input.get("country"),
+                "postCode": orchestration_input.get("postCode"),
+            },
             "education": orchestration_input.get("education", []),
             "workExperience": orchestration_input.get("workExperience", []),
             "cvContent": cv_content, "profileSummary": embeddings.get("profileSummaryText", ""),
@@ -306,6 +328,7 @@ def PerformScoringActivity(inputData: Dict[str, Any]) -> Optional[Dict[str, Any]
 
     try:
         # Call the main get_ai_score function which handles the 3 stages
+        logging.info(f"Activity: Calling get_ai_score for candidate {candidate_data.get('candidateId')} and job {job_details.get('header', {}).get('jobId', 'unknown')}")
         final_score, final_reasoning = get_ai_score(candidate_data, job_details)
 
         # Basic check on results
@@ -313,12 +336,12 @@ def PerformScoringActivity(inputData: Dict[str, Any]) -> Optional[Dict[str, Any]
             logging.info(f"Activity: Scoring complete. Score: {final_score}")
             return {"final_score": final_score, "final_reasoning": final_reasoning}
         else:
-            logging.error(f"Activity Error: get_ai_score returned invalid types. Score: {type(final_score)}, Reasoning: {type(final_reasoning)}")
+            logging.error(f"Activity Error: get_ai_score returned invalid types. Score: {type(final_score)} = {final_score}, Reasoning: {type(final_reasoning)} = {final_reasoning}")
             return None # Indicate failure
 
     except Exception as e:
         # Catch errors from within get_ai_score if they weren't handled internally
-        logging.error(f"Activity Error (PerformScoringActivity): Exception during get_ai_score call: {e}", exc_info=True)
+        logging.error(f"Activity Error (PerformScoringActivity): Exception during get_ai_score call for candidate {candidate_data.get('candidateId', 'unknown')}: {e}", exc_info=True)
         return None # Indicate failure
 
 @bp.activity_trigger(input_name="inputData")
@@ -351,6 +374,28 @@ def GenerateEmbeddingsActivity(inputData: Dict[str, Any]) -> Optional[Dict[str, 
         logging.error(f"Activity Error (GenerateEmbeddingsActivity): {e}", exc_info=True)
         return None
 
+
+@bp.activity_trigger(input_name="inputData")
+def DeleteApplicationActivity(inputData: Dict[str, Any]) -> Dict[str, Any]:
+    """Activity: Deletes an application document from AI Search."""
+    application_id = inputData.get("applicationId")
+    if not application_id:
+        logging.warning("Activity: No applicationId provided for deletion.")
+        return {"success": False, "error": "No applicationId provided"}
+    
+    logging.info(f"Activity: Deleting application {application_id} from index.")
+    try:
+        result = services.search_client.delete_documents(documents=[{"applicationId": application_id}])
+        if result and len(result) > 0 and result[0].succeeded:
+            logging.info(f"Activity: Successfully deleted application {application_id}.")
+            return {"success": True}
+        else:
+            error_msg = result[0].error_message if result and len(result) > 0 else "Unknown error"
+            logging.error(f"Activity: Failed to delete application {application_id}. Error: {error_msg}")
+            return {"success": False, "error": error_msg}
+    except Exception as e:
+        logging.error(f"Activity Error (DeleteApplicationActivity): {e}", exc_info=True)
+        return {"success": False, "error": str(e)}
 
 @bp.activity_trigger(input_name="inputData")
 def IndexApplicationActivity(inputData: Dict[str, Any]) -> Dict[str, Any]:
@@ -492,24 +537,36 @@ def ProfileUpdateOrchestrator(context: df.DurableOrchestrationContext):
         updated_documents = yield context.task_all(rescore_tasks)
         logging.info(f"Orchestrator ({instance_id}): All re-score tasks completed.")
 
-        # Filter out any None results from failed activities
-        valid_updated_documents = [doc for doc in updated_documents if doc]
-        failed_rescore_count = len(original_app_details) - len(valid_updated_documents)
+        # Separate documents for deletion and update based on threshold
+        documents_to_delete = [doc for doc in updated_documents if doc and doc.get("_delete")]
+        documents_to_update = [doc for doc in updated_documents if doc and not doc.get("_delete")]
+        failed_rescore_count = len(original_app_details) - len([doc for doc in updated_documents if doc])
+        
+        deleted_count = 0
+        # Step 6a: Delete below-threshold applications
+        if documents_to_delete:
+            logging.info(f"Orchestrator ({instance_id}): Deleting {len(documents_to_delete)} below-threshold applications.")
+            delete_tasks = []
+            for doc in documents_to_delete:
+                delete_tasks.append(context.call_activity("DeleteApplicationActivity", {"applicationId": doc["applicationId"]}))
+            delete_results = yield context.task_all(delete_tasks)
+            deleted_count = sum(1 for r in delete_results if r and r.get("success"))
+            logging.info(f"Orchestrator ({instance_id}): Deleted {deleted_count} applications.")
 
-        # Step 6: Bulk Index the updated documents
-        if valid_updated_documents:
-            logging.info(f"Orchestrator ({instance_id}): Indexing {len(valid_updated_documents)} updated documents.")
-            index_result = yield context.call_activity("IndexApplicationActivity", {"documents": valid_updated_documents})
+        # Step 6b: Bulk Index the updated documents
+        if documents_to_update:
+            logging.info(f"Orchestrator ({instance_id}): Indexing {len(documents_to_update)} updated documents.")
+            index_result = yield context.call_activity("IndexApplicationActivity", {"documents": documents_to_update})
             if not index_result or not index_result.get("success"):
                  # Log error but maybe still report partial success?
                  logging.error(f"Orchestrator ({instance_id}): Indexing failed for some documents. Details: {index_result.get('error')}")
                  # Decide on final status based on indexing result
-                 final_status = {"status": "PartiallyCompleted", "updated_count": index_result.get("processed", 0), "rescore_failures": failed_rescore_count, "index_failures": index_result.get("failed", len(valid_updated_documents))}
+                 final_status = {"status": "PartiallyCompleted", "updated_count": index_result.get("processed", 0), "deleted_count": deleted_count, "rescore_failures": failed_rescore_count, "index_failures": index_result.get("failed", len(documents_to_update))}
             else:
-                 final_status = {"status": "Completed", "updated_count": len(valid_updated_documents), "rescore_failures": failed_rescore_count}
+                 final_status = {"status": "Completed", "updated_count": len(documents_to_update), "deleted_count": deleted_count, "rescore_failures": failed_rescore_count}
         else:
-             logging.warning(f"Orchestrator ({instance_id}): No documents were successfully re-scored.")
-             final_status = {"status": "Completed", "updated_count": 0, "rescore_failures": failed_rescore_count}
+             logging.warning(f"Orchestrator ({instance_id}): No documents to update.")
+             final_status = {"status": "Completed", "updated_count": 0, "deleted_count": deleted_count, "rescore_failures": failed_rescore_count}
 
         logging.info(f"Orchestrator ({instance_id}): Profile update orchestration finished.")
         context.set_custom_status(final_status)
@@ -567,7 +624,9 @@ def RescoreApplicationActivity(inputData: Dict[str, Any]) -> Optional[Dict[str, 
 
     try:
         # 1. Get ORIGINAL Job Details
-        original_job_details = get_dummy_job_details(job_id)
+        from helper_functions.job_api_client import get_job_details as get_job_details_async
+        import asyncio
+        original_job_details = asyncio.run(get_job_details_async(job_id))
         if not original_job_details:
             raise Exception(f"Original job details not found for {job_id}")
 
@@ -583,25 +642,42 @@ def RescoreApplicationActivity(inputData: Dict[str, Any]) -> Optional[Dict[str, 
             # Do not return a document fragment if scoring failed
             return None
 
+        # Check if new score meets minimum threshold
+        import os
+        score_threshold = float(os.getenv("AI_SCORE_THRESHOLD", "0.0"))
+        if new_score < score_threshold:
+            logging.info(f"Activity (Rescore): New score {new_score} is below threshold {score_threshold} for AppID {application_id}. Marking for deletion.")
+            # Return a special marker document to signal deletion
+            return {
+                "applicationId": application_id,
+                "_delete": True  # Special marker for deletion
+            }
+
         # 4. Prepare the updated document fragment
+        # Extract jobTitle from job_details
+        job_title = original_job_details.get("header", {}).get("jobTitle", "")
+        
         updated_doc_fragment = {
             "applicationId": application_id,
             "candidateId": updated_candidate_data.get('candidateId'),
             "jobId": job_id,
+            "jobTitle": job_title,
             "name": updated_candidate_data.get("fullName"),
             "email": updated_candidate_data.get("email"),
             "phone": updated_candidate_data.get("phoneNumber"),
-            "location": { "city": updated_candidate_data.get("city") },
+            "location": {
+                "address": updated_candidate_data.get("address"),
+                "city": updated_candidate_data.get("city"),
+                "province": updated_candidate_data.get("province"),
+                "country": updated_candidate_data.get("country"),
+                "postCode": updated_candidate_data.get("postCode"),
+            },
             "education": updated_candidate_data.get("education", []),
             "workExperience": updated_candidate_data.get("workExperience", []),
             "cvUrl": updated_candidate_data.get("cv"),
             "cvContent": updated_candidate_data.get('cvContent'),
             "birthDate": updated_candidate_data.get("birthDate"),
             "birthPlace": updated_candidate_data.get("birthPlace"),
-            "address": updated_candidate_data.get("address"),
-            "province": updated_candidate_data.get("province"),
-            "postCode": updated_candidate_data.get("postCode"),
-            "country": updated_candidate_data.get("country"),
             "personalWebsiteUrl": updated_candidate_data.get("personalWebsiteUrl"),
             "gender": updated_candidate_data.get("gender"),
             "interest": updated_candidate_data.get("interest"),
@@ -651,7 +727,11 @@ def GetRankedCandidates(req: func.HttpRequest) -> func.HttpResponse:
 
         table_rows = []
         result_details = []
-        job_details = get_dummy_job_details(job_id)
+        from helper_functions.job_api_client import get_job_details as get_job_details_async
+        import asyncio
+        job_details = asyncio.run(get_job_details_async(job_id))
+        if not job_details:
+            job_details = {"header": {"jobTitle": "the relevant position"}, "items": []}
         job_title = job_details.get("header", {}).get("jobTitle", "the relevant position")
         job_location_item = next((item for item in job_details.get("items", []) if item.get("categoryName") == "Work Location"), None)
         job_location = job_location_item.get("value", "the relevant area") if job_location_item else "the relevant area"

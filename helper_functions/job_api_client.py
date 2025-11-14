@@ -135,8 +135,22 @@ async def get_job_details(job_id: str) -> Optional[Dict[str, Any]]:
         response_data = response.json()
         
         if response_data.get("status") == 200 and "data" in response_data:
-            logger.info(f"Successfully fetched job details for {job_id}.")
-            return response_data.get("data")
+            data = response_data.get("data")
+            
+            # Handle case where API returns a list instead of a single dict
+            if isinstance(data, list):
+                if len(data) > 0:
+                    logger.info(f"Successfully fetched job details for {job_id} (from list, taking first item).")
+                    return data[0]  # Take the first item
+                else:
+                    logger.error(f"Job API returned an empty list for {job_id}.")
+                    return None
+            elif isinstance(data, dict):
+                logger.info(f"Successfully fetched job details for {job_id}.")
+                return data
+            else:
+                logger.error(f"Job API returned unexpected data type for {job_id}: {type(data)}. Data: {data}")
+                return None
         else:
             logger.error(f"Job API returned an error or invalid data for {job_id}. Response: {response_data}")
             return None

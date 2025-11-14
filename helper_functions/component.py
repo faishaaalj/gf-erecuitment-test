@@ -3,6 +3,7 @@
 
 import logging
 import json
+import time
 from typing import List, Optional, Tuple, Dict, Any
 import openai # Ensure openai is imported if used directly for exceptions
 
@@ -11,6 +12,37 @@ from . import services # Imports initialized clients
 from .data_processing import format_job_details_for_prompt, format_candidate_details_for_prompt, _create_safe_dict_key # Import the key helper
 
 logger = logging.getLogger(__name__)
+
+def _call_openai_with_retry(messages, temperature=0.0, max_completion_tokens=1500, response_format=None, max_retries=3):
+    """
+    Wrapper to call OpenAI with retry logic for rate limiting and transient errors.
+    """
+    for attempt in range(max_retries):
+        try:
+            kwargs = {
+                "model": services.openai_chat_deployment,
+                "messages": messages,
+                "temperature": temperature,
+                "max_completion_tokens": max_completion_tokens
+            }
+            if response_format:
+                kwargs["response_format"] = response_format
+            
+            response = services.openai_client.chat.completions.create(**kwargs)
+            return response
+        except openai.RateLimitError as e:
+            wait_time = (2 ** attempt) + 1  # Exponential backoff: 1s, 3s, 5s
+            logger.warning(f"Rate limit hit (attempt {attempt+1}/{max_retries}). Waiting {wait_time}s before retry. Error: {e}")
+            if attempt < max_retries - 1:
+                time.sleep(wait_time)
+            else:
+                logger.error(f"Rate limit error after {max_retries} attempts: {e}")
+                raise
+        except Exception as e:
+            # For other errors, don't retry
+            logger.error(f"OpenAI API call failed (attempt {attempt+1}/{max_retries}): {e}")
+            raise
+    return None
 
 # --- STAGE 1: AI SUB-SCORE EXTRACTION FUNCTION ---
 # (Keep this function exactly as defined in the previous 'Refined Approach' update)
@@ -74,8 +106,7 @@ Output Schema:
     result_json_str = ""
     try:
         logger.info("Calling OpenAI for sub-score extraction.")
-        response = services.openai_client.chat.completions.create(
-            model=services.openai_chat_deployment,
+        response = _call_openai_with_retry(
             messages=[{"role": "system", "content": system_prompt_extract_final}, {"role": "user", "content": user_prompt}],
             temperature=0.0,
             max_completion_tokens=1500,
@@ -285,8 +316,7 @@ Generate the reasoning text in Bahasa Indonesia based *only* on the provided sco
     result_text = "Gagal menghasilkan alasan penilaian." # Default error message
     try:
         logger.info("Calling OpenAI for reasoning generation.")
-        response = services.openai_client.chat.completions.create(
-            model=services.openai_chat_deployment,
+        response = _call_openai_with_retry(
             messages=[
                 {"role": "system", "content": system_prompt_reasoning},
                 {"role": "user", "content": reasoning_input_context}
@@ -387,8 +417,7 @@ def summarize_candidate_for_table(candidate_summary_input: dict) -> dict:
     result_json_str = ""
     try:
         logger.info("Calling OpenAI for summarization.")
-        response = services.openai_client.chat.completions.create(
-            model=services.openai_chat_deployment,
+        response = _call_openai_with_retry(
             messages=[{"role": "system", "content": system_prompt_summary}, {"role": "user", "content": user_content_str}],
             max_completion_tokens=300,
             response_format={"type": "json_object"}
