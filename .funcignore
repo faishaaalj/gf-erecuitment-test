@@ -6,3 +6,10 @@ __queuestorage__
 local.settings.json
 test
 .venv
+scripts/
+data_dummy/
+*.log
+submission_results_*.json
+final_results_*.json
+failed_applicants_*.json
+bulk_submit_*.log
