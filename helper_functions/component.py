@@ -473,3 +473,147 @@ def generate_embedding(text: str) -> Optional[List[float]]:
     except Exception as e:
         logger.error(f"Error generating embedding: {e}", exc_info=True)
         return None
+
+
+def extract_candidate_industries(work_experience: List[Dict[str, Any]]) -> Tuple[List[str], List[str]]:
+    """
+    Extracts broad industry categories from candidate's work experience.
+    Uses AI to analyze company names and job descriptions to classify industries.
+    
+    Returns:
+        Tuple containing:
+        - List of industries per work experience (same order, aligned with input)
+        - List of unique industry names for flat industries field
+    
+    Example:
+        (["Oil & Gas", "FMCG", "Banking"], ["Oil & Gas", "FMCG", "Banking"])
+    """
+    if not work_experience or not isinstance(work_experience, list):
+        logger.warning("No work experience provided for industry extraction.")
+        return [], []
+    
+    logger.info(f"Extracting industries from {len(work_experience)} work experience entries.")
+    
+    # Prepare work experience data for the AI prompt
+    experience_summary = []
+    for i, exp in enumerate(work_experience, 1):
+        company = exp.get('companyName', 'Unknown Company')
+        position = exp.get('jobTitle', exp.get('position', 'Unknown Position'))  # Try jobTitle first
+        description = exp.get('description', exp.get('jobDescription', ''))  # Try both field names
+        # Truncate description to keep prompt manageable
+        desc_snippet = description[:200] if description else ''
+        experience_summary.append(
+            f"{i}. Company: {company}\n   Position: {position}\n   Description: {desc_snippet}"
+        )
+    
+    experience_text = "\n\n".join(experience_summary)
+    
+    system_prompt = """
+You are an industry classification expert. Your task is to analyze a candidate's work experience and classify each job into a broad industry category.
+
+Instructions:
+1. Review the provided work experience entries (company names, positions, job descriptions).
+2. For EACH experience entry (numbered 1, 2, 3...), determine the primary industry sector based on:
+   - Company name (e.g., "Bank Mandiri" → Banking)
+   - Job description content
+   - Position title
+3. Use standard industry classifications (e.g., Banking, Oil & Gas, E-commerce, FMCG, Technology, Healthcare, Manufacturing, Retail, Education, Hospitality, Telecommunications, etc.)
+4. If you cannot determine the industry, use "Other"
+5. Return a JSON object with:
+   - "per_job_industries": An array of industries, one for each job IN THE SAME ORDER as provided
+   - "unique_industries": A unique list of all industries found (for summary)
+
+Output Schema:
+{
+  "per_job_industries": ["Industry1", "Industry2", "Industry3", ...],
+  "unique_industries": ["Industry1", "Industry2", ...]
+}
+"""
+    
+    user_prompt = f"""
+Please analyze the following work experience entries and classify each into its primary industry:
+
+{experience_text}
+
+Return the industries as a JSON object with both per-job and unique lists.
+"""
+    
+    result_json_str = ""
+    try:
+        logger.info("Calling OpenAI for industry extraction.")
+        response = _call_openai_with_retry(
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            temperature=0.1,  # Low temperature for consistent categorization
+            max_completion_tokens=500,  # Increased for per-job classifications
+            response_format={"type": "json_object"}
+        )
+        
+        if response.choices and response.choices[0].message.content:
+            result_json_str = response.choices[0].message.content.strip()
+            logger.debug(f"Raw industry extraction response: {result_json_str}")
+            
+            if result_json_str.startswith('{') and result_json_str.endswith('}'):
+                result = json.loads(result_json_str)
+                per_job_industries = result.get('per_job_industries', [])
+                unique_industries = result.get('unique_industries', [])
+                
+                # Validate per_job_industries
+                if isinstance(per_job_industries, list):
+                    # Ensure we have the same number as work experience entries
+                    if len(per_job_industries) != len(work_experience):
+                        logger.warning(f"Mismatch: {len(per_job_industries)} industries vs {len(work_experience)} jobs. Padding with 'Other'.")
+                        # Pad or truncate to match
+                        while len(per_job_industries) < len(work_experience):
+                            per_job_industries.append("Other")
+                        per_job_industries = per_job_industries[:len(work_experience)]
+                    
+                    # Clean and validate each entry
+                    validated_per_job = []
+                    for ind in per_job_industries:
+                        if isinstance(ind, str) and ind.strip():
+                            validated_per_job.append(ind.strip())
+                        else:
+                            validated_per_job.append("Other")
+                    
+                    # Validate unique_industries
+                    validated_unique = []
+                    if isinstance(unique_industries, list):
+                        for ind in unique_industries:
+                            if isinstance(ind, str) and ind.strip() and ind.strip() != "Other":
+                                validated_unique.append(ind.strip())
+                    
+                    # If no unique list provided, derive from per_job
+                    if not validated_unique:
+                        validated_unique = list(set(ind for ind in validated_per_job if ind != "Other"))
+                    
+                    logger.info(f"Successfully extracted industries. Per-job: {validated_per_job}, Unique: {validated_unique}")
+                    return validated_per_job, validated_unique
+                else:
+                    logger.error(f"'per_job_industries' field is not a list: {per_job_industries}")
+                    return ["Other"] * len(work_experience), []
+            else:
+                logger.error(f"AI industry response was not valid JSON: {result_json_str}")
+                return ["Other"] * len(work_experience), []
+        else:
+            finish_info = response.choices[0].finish_details if response.choices else None
+            if finish_info and finish_info.get('type') == 'stop' and finish_info.get('stop') == 'content_filter':
+                logger.error("OpenAI industry extraction response was filtered due to content policy.")
+            else:
+                logger.warning("OpenAI industry extraction response was empty.")
+            return ["Other"] * len(work_experience), []
+    
+    except json.JSONDecodeError as json_err:
+        logger.error(f"Failed to decode JSON industry response: {json_err}. Raw: {result_json_str}")
+        return ["Other"] * len(work_experience), []
+    except openai.BadRequestError as e:
+        if e.code == 'content_filter':
+            logger.error(f"OpenAI industry extraction prompt was filtered: {e.message}")
+        else:
+            logger.error(f"BadRequestError during industry extraction: {e}", exc_info=True)
+        return ["Other"] * len(work_experience), []
+    except Exception as e:
+        logger.error(f"Error extracting candidate industries: {e}", exc_info=True)
+        return ["Other"] * len(work_experience), []

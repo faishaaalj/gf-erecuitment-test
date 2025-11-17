@@ -13,9 +13,84 @@ from helper_functions import services
 from helper_functions.data_processing import format_candidate_details_for_prompt, format_job_details_for_prompt, _create_safe_dict_key, clean_html
 # from helper_functions.data_models import get_dummy_job_details
 from helper_functions.job_api_client import get_job_details
-from helper_functions.component import _find_existing_application, get_ai_score, summarize_candidate_for_table, generate_embedding
+from helper_functions.component import _find_existing_application, get_ai_score, summarize_candidate_for_table, generate_embedding, extract_candidate_industries
 
 bp = df.Blueprint()
+
+def _prepare_field_for_index(value, field_name=""):
+    """Helper to ensure field values are compatible with AI Search schema.
+    Converts arrays to comma-separated strings for fields expecting Edm.String.
+    """
+    if value is None:
+        return None
+    # If it's a list/array and should be a string, join it
+    if isinstance(value, list) and not all(isinstance(x, dict) for x in value):
+        # Simple list of strings/values - join them
+        return ", ".join(str(v) for v in value if v)
+    return value
+
+def _parse_gpa(gpa_value):
+    """Helper to parse GPA values that may be in format '3.87/4.00', '3.87', or '3,71' (comma as decimal).
+    Returns float value or None if invalid.
+    """
+    if gpa_value is None:
+        return None
+    
+    # If already a number, return it
+    if isinstance(gpa_value, (int, float)):
+        return float(gpa_value)
+    
+    # If string, try to parse
+    if isinstance(gpa_value, str):
+        gpa_str = gpa_value.strip()
+        if not gpa_str:
+            return None
+        
+        # Replace comma with dot for decimal separator (e.g., '3,71' -> '3.71')
+        gpa_str = gpa_str.replace(',', '.')
+        
+        # Check if it contains '/' (e.g., '3.87/4.00')
+        if '/' in gpa_str:
+            try:
+                # Extract the numerator part before '/'
+                numerator = gpa_str.split('/')[0].strip()
+                return float(numerator)
+            except (ValueError, IndexError):
+                logging.warning(f"Failed to parse GPA value: {gpa_value}")
+                return None
+        else:
+            # Try to convert directly
+            try:
+                return float(gpa_str)
+            except ValueError:
+                logging.warning(f"Failed to parse GPA value: {gpa_value}")
+                return None
+    
+    return None
+
+def _encode_cv_url(cv_url):
+    """Helper to encode CV URL by replacing spaces with %20.
+    Handles URLs that may contain spaces in filenames.
+    """
+    if not cv_url or not isinstance(cv_url, str):
+        return cv_url
+    
+    # Only encode the path part, not the entire URL
+    from urllib.parse import quote
+    
+    # Split URL into base and path
+    if '://' in cv_url:
+        # Find the position after the domain
+        parts = cv_url.split('/', 3)  # Split into protocol, empty, domain, path
+        if len(parts) >= 4:
+            protocol_and_domain = '/'.join(parts[:3])  # e.g., 'https://career.garudafood.co.id'
+            path = parts[3]  # e.g., 'Files/Resume/20251111553679Curriculum Vitae.pdf'
+            # Encode only the path part, keeping '/' as is
+            encoded_path = quote(path, safe='/=')
+            return f"{protocol_and_domain}/{encoded_path}"
+    
+    # Fallback: simple space replacement if URL structure is unusual
+    return cv_url.replace(' ', '%20')
 
 @bp.activity_trigger(input_name="jobId")
 async def GetJobDetailsActivity(jobId: str) -> Optional[dict]:
@@ -141,6 +216,16 @@ def ApplicationProcessingOrchestrator(context: df.DurableOrchestrationContext):
         # Extract jobTitle from job_details
         job_title = job_details.get("header", {}).get("jobTitle", "")
         
+        # Encode CV URL to handle spaces
+        encoded_cv_url = _encode_cv_url(cv_url)
+        
+        # Parse GPA values in education to handle '3.87/4.00' format
+        education_data = orchestration_input.get("education", [])
+        if education_data and isinstance(education_data, list):
+            for edu in education_data:
+                if isinstance(edu, dict) and 'gpa' in edu:
+                    edu['gpa'] = _parse_gpa(edu['gpa'])
+        
         application_document = {
             "applicationId": application_id, "candidateId": candidate_id, "jobId": job_id,
             "jobTitle": job_title,
@@ -151,13 +236,13 @@ def ApplicationProcessingOrchestrator(context: df.DurableOrchestrationContext):
             "birthPlace": orchestration_input.get("birthPlace"),
             "personalWebsiteUrl": orchestration_input.get("personalWebsiteUrl"),
             "gender": orchestration_input.get("gender"),
-            "interest": orchestration_input.get("interest"),
-            "religion": orchestration_input.get("religion"),
-            "medical": orchestration_input.get("medical"),
-            "placement": orchestration_input.get("placement"),
+            "interest": _prepare_field_for_index(orchestration_input.get("interest"), "interest"),
+            "religion": _prepare_field_for_index(orchestration_input.get("religion"), "religion"),
+            "medical": _prepare_field_for_index(orchestration_input.get("medical"), "medical"),
+            "placement": _prepare_field_for_index(orchestration_input.get("placement"), "placement"),
             "expectedSalary": orchestration_input.get("expectedSalary"),
-            "benefit": orchestration_input.get("benefit"),
-            "cvUrl": cv_url, "aiScore": final_score, "aiReasoning": final_reasoning,
+            "benefit": _prepare_field_for_index(orchestration_input.get("benefit"), "benefit"),
+            "cvUrl": encoded_cv_url, "aiScore": final_score, "aiReasoning": final_reasoning,
             "location": {
                 "address": orchestration_input.get("address"),
                 "city": orchestration_input.get("city"),
@@ -165,11 +250,12 @@ def ApplicationProcessingOrchestrator(context: df.DurableOrchestrationContext):
                 "country": orchestration_input.get("country"),
                 "postCode": orchestration_input.get("postCode"),
             },
-            "education": orchestration_input.get("education", []),
-            "workExperience": orchestration_input.get("workExperience", []),
+            "education": education_data,
+            "workExperience": embeddings.get("workExperienceWithIndustries", orchestration_input.get("workExperience", [])),
             "cvContent": cv_content, "profileSummary": embeddings.get("profileSummaryText", ""),
             "profileSummaryVector": embeddings.get("profileSummaryVector", []),
             "cvContentVector": embeddings.get("cvContentVector", []),
+            "industries": embeddings.get("industries", []),
         }
 
         logging.info(f"Orchestrator ({instance_id}): Calling IndexApplicationActivity.")
@@ -200,9 +286,11 @@ def FindExistingApplicationActivity(inputData: Dict[str, str]) -> Optional[str]:
 @bp.activity_trigger(input_name="cvUrl")
 def AnalyzeCvActivity(cvUrl: str) -> Optional[str]:
     """Activity: Analyzes CV content from a URL using Document Intelligence."""
-    logging.info(f"Activity: Analyzing CV from URL: {cvUrl}")
+    # Encode the URL to handle spaces in filenames
+    encoded_cv_url = _encode_cv_url(cvUrl)
+    logging.info(f"Activity: Analyzing CV from URL: {encoded_cv_url}")
     try:
-        analysis_request = {"urlSource": cvUrl}
+        analysis_request = {"urlSource": encoded_cv_url}
         poller = services.document_intelligence_client.begin_analyze_document(
             "prebuilt-layout",
             analysis_request
@@ -346,29 +434,42 @@ def PerformScoringActivity(inputData: Dict[str, Any]) -> Optional[Dict[str, Any]
 
 @bp.activity_trigger(input_name="inputData")
 def GenerateEmbeddingsActivity(inputData: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-    """Activity: Generates profile summary text and embeddings."""
+    """Activity: Generates profile summary text, embeddings, and extracts industries."""
     candidate_data = inputData.get("candidate_data")
-    logging.info("Activity: Generating embeddings.")
+    logging.info("Activity: Generating embeddings and extracting industries.")
     try:
         # Generate summary text first
         profile_summary = format_candidate_details_for_prompt(candidate_data)
         if not profile_summary:
              logging.warning("Activity: Profile summary text is empty.")
              # Return empty structure? Or fail? Returning empty for now.
-             return {"profileSummaryText": "", "profileSummaryVector": [], "cvContentVector": []}
+             return {"profileSummaryText": "", "profileSummaryVector": [], "cvContentVector": [], "industries": [], "workExperienceWithIndustries": []}
 
 
-        # Import generate_embedding function
-        from helper_functions.component import generate_embedding
+        # Import functions
+        from helper_functions.component import generate_embedding, extract_candidate_industries
 
         profile_vector = generate_embedding(profile_summary)
         cv_vector = generate_embedding(candidate_data.get('cvContent'))
+        
+        # Extract industries from work experience
+        work_experience = candidate_data.get('workExperience', [])
+        per_job_industries, unique_industries = extract_candidate_industries(work_experience)
+        
+        # Merge industries back into work experience
+        work_experience_with_industries = []
+        for i, exp in enumerate(work_experience):
+            exp_with_industry = exp.copy()  # Don't modify original
+            exp_with_industry['industry'] = per_job_industries[i] if i < len(per_job_industries) else "Other"
+            work_experience_with_industries.append(exp_with_industry)
 
-        logging.info("Activity: Embeddings generated successfully (or None if failed).")
+        logging.info(f"Activity: Embeddings and industries generated successfully. Unique industries: {unique_industries}")
         return {
             "profileSummaryText": profile_summary,
             "profileSummaryVector": profile_vector if profile_vector else [],
-            "cvContentVector": cv_vector if cv_vector else []
+            "cvContentVector": cv_vector if cv_vector else [],
+            "industries": unique_industries,  # Flat unique list
+            "workExperienceWithIndustries": work_experience_with_industries  # Work experience with industry field
         }
     except Exception as e:
         logging.error(f"Activity Error (GenerateEmbeddingsActivity): {e}", exc_info=True)
@@ -406,6 +507,18 @@ def IndexApplicationActivity(inputData: Dict[str, Any]) -> Dict[str, Any]:
         return {"success": True, "processed": 0} # No-op is successful
 
     logging.info(f"Activity: Indexing {len(documents)} document(s).")
+    
+    # Debug: Log field types to identify array issues
+    if documents:
+        doc = documents[0]
+        for key, value in doc.items():
+            if isinstance(value, list) and value and not isinstance(value[0], (dict, float, int)):
+                logging.warning(f"DEBUG: Field '{key}' is a simple list (might need conversion): {value[:2]}...")
+            elif isinstance(value, list) and value and isinstance(value[0], dict):
+                logging.info(f"DEBUG: Field '{key}' is complex list (should be OK): {len(value)} items")
+            elif isinstance(value, list):
+                logging.info(f"DEBUG: Field '{key}' is list: {type(value[0]) if value else 'empty'}, length: {len(value)}")
+    
     try:
         # Use merge_or_upload_documents for create/update
         results = services.search_client.merge_or_upload_documents(documents=documents)
@@ -657,6 +770,17 @@ def RescoreApplicationActivity(inputData: Dict[str, Any]) -> Optional[Dict[str, 
         # Extract jobTitle from job_details
         job_title = original_job_details.get("header", {}).get("jobTitle", "")
         
+        # Encode CV URL to handle spaces
+        cv_url_raw = updated_candidate_data.get("cv")
+        encoded_cv_url = _encode_cv_url(cv_url_raw)
+        
+        # Parse GPA values in education to handle '3.87/4.00' format
+        education_data = updated_candidate_data.get("education", [])
+        if education_data and isinstance(education_data, list):
+            for edu in education_data:
+                if isinstance(edu, dict) and 'gpa' in edu:
+                    edu['gpa'] = _parse_gpa(edu['gpa'])
+        
         updated_doc_fragment = {
             "applicationId": application_id,
             "candidateId": updated_candidate_data.get('candidateId'),
@@ -672,23 +796,24 @@ def RescoreApplicationActivity(inputData: Dict[str, Any]) -> Optional[Dict[str, 
                 "country": updated_candidate_data.get("country"),
                 "postCode": updated_candidate_data.get("postCode"),
             },
-            "education": updated_candidate_data.get("education", []),
-            "workExperience": updated_candidate_data.get("workExperience", []),
-            "cvUrl": updated_candidate_data.get("cv"),
+            "education": education_data,
+            "workExperience": new_embeddings.get("workExperienceWithIndustries", updated_candidate_data.get("workExperience", [])),
+            "cvUrl": encoded_cv_url,
             "cvContent": updated_candidate_data.get('cvContent'),
             "birthDate": updated_candidate_data.get("birthDate"),
             "birthPlace": updated_candidate_data.get("birthPlace"),
             "personalWebsiteUrl": updated_candidate_data.get("personalWebsiteUrl"),
             "gender": updated_candidate_data.get("gender"),
-            "interest": updated_candidate_data.get("interest"),
-            "religion": updated_candidate_data.get("religion"),
-            "medical": updated_candidate_data.get("medical"),
-            "placement": updated_candidate_data.get("placement"),
+            "interest": _prepare_field_for_index(updated_candidate_data.get("interest"), "interest"),
+            "religion": _prepare_field_for_index(updated_candidate_data.get("religion"), "religion"),
+            "medical": _prepare_field_for_index(updated_candidate_data.get("medical"), "medical"),
+            "placement": _prepare_field_for_index(updated_candidate_data.get("placement"), "placement"),
             "expectedSalary": updated_candidate_data.get("expectedSalary"),
-            "benefit": updated_candidate_data.get("benefit"),
+            "benefit": _prepare_field_for_index(updated_candidate_data.get("benefit"), "benefit"),
             "profileSummary": new_embeddings.get("profileSummaryText", ""),
             "profileSummaryVector": new_embeddings.get("profileSummaryVector", []),
             "cvContentVector": new_embeddings.get("cvContentVector", []),
+            "industries": new_embeddings.get("industries", []),
             "aiScore": new_score,
             "aiReasoning": new_reasoning,
         }
