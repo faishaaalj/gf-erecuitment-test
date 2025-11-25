@@ -167,7 +167,9 @@ def ApplicationProcessingOrchestrator(context: df.DurableOrchestrationContext):
         # Step 2: Analyze CV
         logging.info(f"Orchestrator ({instance_id}): Calling AnalyzeCvActivity.")
         cv_content = yield context.call_activity("AnalyzeCvActivity", cv_url)
-        if cv_content is None: raise Exception("AnalyzeCvActivity failed.")
+        if cv_content is None:
+            logging.warning(f"Orchestrator ({instance_id}): AnalyzeCvActivity failed. Continuing with empty CV content.")
+            cv_content = ""  # Use empty string instead of failing
         orchestration_input['cvContent'] = cv_content # Add content for subsequent steps
 
         # Step 3: Get Job Details
@@ -605,7 +607,8 @@ def ProfileUpdateOrchestrator(context: df.DurableOrchestrationContext):
         logging.info(f"Orchestrator ({instance_id}): Analyzing updated CV.")
         new_cv_content = yield context.call_activity("AnalyzeCvActivity", new_cv_url)
         if new_cv_content is None:
-            raise Exception("AnalyzeCvActivity failed for updated CV.")
+            logging.warning(f"Orchestrator ({instance_id}): AnalyzeCvActivity failed for updated CV. Continuing with empty CV content.")
+            new_cv_content = ""  # Use empty string instead of failing
         updated_candidate_data['cvContent'] = new_cv_content
 
         # Step 2: Generate NEW Embeddings (once)
