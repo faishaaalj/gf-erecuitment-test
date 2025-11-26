@@ -622,7 +622,7 @@ def ProfileUpdateOrchestrator(context: df.DurableOrchestrationContext):
         logging.info(f"Orchestrator ({instance_id}): Finding existing applications.")
         if not jobs_applied_list:
              logging.warning(f"Orchestrator ({instance_id}): No job IDs provided, nothing to update.")
-             return {"status": "Completed", "updated_count": 0}
+             return {"status": "Completed", "updated_count": 0, "updated_scores": []}
 
         # Call an activity to perform the search
         search_input = {"candidateId": candidate_id, "jobIds": jobs_applied_list}
@@ -630,7 +630,7 @@ def ProfileUpdateOrchestrator(context: df.DurableOrchestrationContext):
 
         if not original_app_details:
              logging.warning(f"Orchestrator ({instance_id}): No existing applications found matching job IDs.")
-             return {"status": "Completed", "updated_count": 0}
+             return {"status": "Completed", "updated_count": 0, "updated_scores": []}
 
         logging.info(f"Orchestrator ({instance_id}): Found {len(original_app_details)} applications to re-score.")
 
@@ -652,6 +652,27 @@ def ProfileUpdateOrchestrator(context: df.DurableOrchestrationContext):
         logging.info(f"Orchestrator ({instance_id}): Waiting for {len(rescore_tasks)} re-score tasks.")
         updated_documents = yield context.task_all(rescore_tasks)
         logging.info(f"Orchestrator ({instance_id}): All re-score tasks completed.")
+
+        # Extract scores from all documents for reporting (including below-threshold)
+        updated_scores = []
+        for doc in updated_documents:
+            if doc:
+                if doc.get("_delete"):
+                    # Include deleted applications with their scores
+                    updated_scores.append({
+                        "applicationId": doc.get("applicationId"),
+                        "jobId": doc.get("jobId"),
+                        "aiScore": doc.get("aiScore"),
+                        "belowThreshold": True
+                    })
+                else:
+                    # Include updated applications with their scores
+                    updated_scores.append({
+                        "applicationId": doc.get("applicationId"),
+                        "jobId": doc.get("jobId"),
+                        "aiScore": doc.get("aiScore"),
+                        "belowThreshold": False
+                    })
 
         # Separate documents for deletion and update based on threshold
         documents_to_delete = [doc for doc in updated_documents if doc and doc.get("_delete")]
@@ -677,12 +698,12 @@ def ProfileUpdateOrchestrator(context: df.DurableOrchestrationContext):
                  # Log error but maybe still report partial success?
                  logging.error(f"Orchestrator ({instance_id}): Indexing failed for some documents. Details: {index_result.get('error')}")
                  # Decide on final status based on indexing result
-                 final_status = {"status": "PartiallyCompleted", "updated_count": index_result.get("processed", 0), "deleted_count": deleted_count, "rescore_failures": failed_rescore_count, "index_failures": index_result.get("failed", len(documents_to_update))}
+                 final_status = {"status": "PartiallyCompleted", "updated_count": index_result.get("processed", 0), "deleted_count": deleted_count, "rescore_failures": failed_rescore_count, "index_failures": index_result.get("failed", len(documents_to_update)), "updated_scores": updated_scores}
             else:
-                 final_status = {"status": "Completed", "updated_count": len(documents_to_update), "deleted_count": deleted_count, "rescore_failures": failed_rescore_count}
+                 final_status = {"status": "Completed", "updated_count": len(documents_to_update), "deleted_count": deleted_count, "rescore_failures": failed_rescore_count, "updated_scores": updated_scores}
         else:
              logging.warning(f"Orchestrator ({instance_id}): No documents to update.")
-             final_status = {"status": "Completed", "updated_count": 0, "deleted_count": deleted_count, "rescore_failures": failed_rescore_count}
+             final_status = {"status": "Completed", "updated_count": 0, "deleted_count": deleted_count, "rescore_failures": failed_rescore_count, "updated_scores": updated_scores}
 
         logging.info(f"Orchestrator ({instance_id}): Profile update orchestration finished.")
         context.set_custom_status(final_status)
@@ -763,9 +784,11 @@ def RescoreApplicationActivity(inputData: Dict[str, Any]) -> Optional[Dict[str, 
         score_threshold = float(os.getenv("AI_SCORE_THRESHOLD", "0.0"))
         if new_score < score_threshold:
             logging.info(f"Activity (Rescore): New score {new_score} is below threshold {score_threshold} for AppID {application_id}. Marking for deletion.")
-            # Return a special marker document to signal deletion
+            # Return a special marker document to signal deletion with score info
             return {
                 "applicationId": application_id,
+                "jobId": job_id,
+                "aiScore": new_score,
                 "_delete": True  # Special marker for deletion
             }
 
