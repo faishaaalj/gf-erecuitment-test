@@ -277,7 +277,7 @@ Instructions:
 1.  Review the 'Final Score', 'Mandatory Criteria Failures', and 'Criteria Details (Sub-Scores)' provided.
 2.  Review the 'Candidate Profile' and 'Job Details' for context on what each criterion means.
 3.  Generate a natural language paragraph (Bahasa Indonesia) that:
-    - Starts by stating the final calculated score (e.g., "Skor akhir kandidat adalah [Skor Akhir].").
+    - Starts by stating the final calculated score as a whole number (e.g., "Skor akhir kandidat adalah 53." NOT "53.000" or "53.0").
     - If mandatory criteria were failed, EXPLICITLY state which ones (e.g., "Namun, kandidat gagal memenuhi kriteria WAJIB berikut: [Nama Kriteria Gagal]."). This is the most critical information.
     - Briefly highlights 1-2 key strengths (criteria with high sub-scores, especially high-weight ones), explaining *why* the candidate matched well based on their profile.
     - Briefly highlights 1-2 key weaknesses (criteria with low sub-scores, especially high-weight ones OR mandatory failures), explaining the mismatch based on their profile.
@@ -291,9 +291,12 @@ Instructions:
     formatted_job_details = format_job_details_for_prompt(job_details) # For context
     formatted_candidate_details = format_candidate_details_for_prompt(candidate_data) # For context
 
+    # Format final score as integer for display (remove decimals for clarity)
+    final_score_display = int(round(reasoning_data['final_score']))
+
     # Structure the input data clearly for the AI
     reasoning_input_context = f"""
-Final Score Provided: {reasoning_data['final_score']:.3f}
+Final Score Provided: {final_score_display}
 
 Mandatory Criteria Failures: {', '.join(reasoning_data['mandatory_failed']) if reasoning_data['mandatory_failed'] else 'Tidak ada'}
 
