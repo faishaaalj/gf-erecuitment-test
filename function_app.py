@@ -931,6 +931,140 @@ def GetRankedCandidates(req: func.HttpRequest) -> func.HttpResponse:
         return func.HttpResponse("Internal Server Error.", status_code=500)
 
 
+# --- Delete Candidate Applications Endpoint ---
+@bp.route(route="delete_candidate_applications", methods=["DELETE", "POST"])
+def DeleteCandidateApplications(req: func.HttpRequest) -> func.HttpResponse:
+    """
+    HTTP Trigger to delete candidate applications from AI Search index.
+    
+    Request Body:
+    {
+        "candidateId": "12345",      # Required
+        "jobId": "4323"              # Optional - if omitted, deletes ALL applications for this candidate
+    }
+    
+    Returns:
+    {
+        "candidateId": "12345",
+        "jobId": "4323" or null,
+        "deletedCount": 3,
+        "deletedApplications": [
+            {"applicationId": "abc-123", "jobId": "4323"},
+            ...
+        ]
+    }
+    """
+    logging.info('DeleteCandidateApplications function processed a request.')
+    
+    try:
+        req_body = req.get_json()
+    except ValueError:
+        return func.HttpResponse(
+            json.dumps({"error": "Invalid JSON format in request body."}),
+            status_code=400,
+            mimetype="application/json"
+        )
+    
+    candidate_id = req_body.get('candidateId')
+    job_id = req_body.get('jobId')  # Optional
+    
+    if not candidate_id or (isinstance(candidate_id, str) and not candidate_id.strip()):
+        return func.HttpResponse(
+            json.dumps({"error": "Missing or empty required field: candidateId"}),
+            status_code=400,
+            mimetype="application/json"
+        )
+    
+    candidate_id = str(candidate_id).strip()
+    job_id = str(job_id).strip() if job_id else None
+    
+    try:
+        # Build search filter
+        if job_id:
+            search_filter = f"candidateId eq '{candidate_id}' and jobId eq '{job_id}'"
+            logging.info(f"Searching for applications: candidateId={candidate_id}, jobId={job_id}")
+        else:
+            search_filter = f"candidateId eq '{candidate_id}'"
+            logging.info(f"Searching for ALL applications for candidateId={candidate_id}")
+        
+        # Find all matching applications
+        results = services.search_client.search(
+            search_text="*",
+            filter=search_filter,
+            select="applicationId, jobId, name"
+        )
+        
+        applications_to_delete = []
+        for result in results:
+            app_id = result.get('applicationId')
+            if app_id:
+                applications_to_delete.append({
+                    "applicationId": app_id,
+                    "jobId": result.get('jobId'),
+                    "name": result.get('name')
+                })
+        
+        if not applications_to_delete:
+            logging.info(f"No applications found for candidateId={candidate_id}" + (f", jobId={job_id}" if job_id else ""))
+            return func.HttpResponse(
+                json.dumps({
+                    "candidateId": candidate_id,
+                    "jobId": job_id,
+                    "deletedCount": 0,
+                    "deletedApplications": [],
+                    "message": "No applications found matching the criteria."
+                }),
+                status_code=200,
+                mimetype="application/json"
+            )
+        
+        logging.info(f"Found {len(applications_to_delete)} application(s) to delete.")
+        
+        # Delete the applications from the index
+        documents_to_delete = [{"applicationId": app["applicationId"]} for app in applications_to_delete]
+        delete_results = services.search_client.delete_documents(documents=documents_to_delete)
+        
+        # Count successful deletions
+        successful_deletions = []
+        failed_deletions = []
+        for i, result in enumerate(delete_results):
+            if result.succeeded:
+                successful_deletions.append(applications_to_delete[i])
+            else:
+                failed_deletions.append({
+                    **applications_to_delete[i],
+                    "error": result.error_message
+                })
+        
+        logging.info(f"Successfully deleted {len(successful_deletions)} application(s).")
+        if failed_deletions:
+            logging.warning(f"Failed to delete {len(failed_deletions)} application(s): {failed_deletions}")
+        
+        response_data = {
+            "candidateId": candidate_id,
+            "jobId": job_id,
+            "deletedCount": len(successful_deletions),
+            "deletedApplications": successful_deletions
+        }
+        
+        if failed_deletions:
+            response_data["failedDeletions"] = failed_deletions
+        
+        return func.HttpResponse(
+            json.dumps(response_data, ensure_ascii=False),
+            status_code=200,
+            mimetype="application/json"
+        )
+        
+    except Exception as e:
+        logging.error(f"Error deleting candidate applications: {e}", exc_info=True)
+        return func.HttpResponse(
+            json.dumps({"error": f"Internal server error: {str(e)}"}),
+            status_code=500,
+            mimetype="application/json"
+        )
+
+
 # --- Register the Blueprint with the main Function App ---
 app = func.FunctionApp(http_auth_level=func.AuthLevel.FUNCTION)
 app.register_functions(bp) # Register all functions defined in the blueprint
