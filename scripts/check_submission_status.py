@@ -14,6 +14,7 @@ import sys
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
+# python scripts/check_submission_status.py submission_results_20250810_143022.json
 
 async def check_status(session: aiohttp.ClientSession, status_uri: str) -> Dict[str, Any]:
     """Check the status of a single orchestration."""

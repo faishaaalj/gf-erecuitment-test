@@ -12,6 +12,8 @@ from pathlib import Path
 import time
 from datetime import datetime
 
+# python scripts/bulk_submit_applicants.py data_dummy/applicants.json
+
 # Configuration
 FUNCTION_ENDPOINT = "http://localhost:7071/api/apply_job"  # Change to Azure URL in production
 BATCH_SIZE = 10  # Process 10 applicants concurrently
