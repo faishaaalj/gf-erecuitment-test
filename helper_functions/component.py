@@ -276,23 +276,32 @@ Objective: You are an expert HR Analyst. Your task is to generate a concise, des
 Instructions:
 1.  Review the 'Final Score', 'Mandatory Criteria Failures', and 'Criteria Details (Sub-Scores)' provided.
 2.  Review the 'Candidate Profile' and 'Job Details' for context on what each criterion means.
-3.  Generate a natural language paragraph (Bahasa Indonesia) that:
-    - Starts by stating the final calculated score as a whole number (e.g., "Skor akhir kandidat adalah 53." NOT "53.000" or "53.0").
-    - If mandatory criteria were failed, EXPLICITLY state which ones (e.g., "Namun, kandidat gagal memenuhi kriteria WAJIB berikut: [Nama Kriteria Gagal]."). This is the most critical information.
-    - Briefly highlights 1-2 key strengths (criteria with high sub-scores, especially high-weight ones), explaining *why* the candidate matched well based on their profile.
-    - Briefly highlights 1-2 key weaknesses (criteria with low sub-scores, especially high-weight ones OR mandatory failures), explaining the mismatch based on their profile.
-    - Concludes with an overall assessment (e.g., "Secara keseluruhan, kandidat [sangat cocok / cukup cocok / kurang cocok] untuk peran ini berdasarkan kriteria yang dinilai.").
+3.  Generate the reasoning in Bahasa Indonesia with the following EXACT structure (use blank lines between sections):
+
+[First line: Score statement]
+Skor akhir kandidat adalah [EXACT SCORE AS PROVIDED - do not round or modify].
+
+[Blank line, then Strengths section]
+Kelebihan: [1-2 key strengths - criteria with high sub-scores, explaining WHY the candidate matched well based on their profile]
+
+[Blank line, then Weaknesses section]  
+Kekurangan: [1-2 key weaknesses - criteria with low sub-scores OR mandatory failures, explaining the mismatch. If mandatory criteria were failed, EXPLICITLY state which ones here]
+
+[Blank line, then Conclusion section]
+Kesimpulan: Secara keseluruhan, kandidat [sangat cocok / cukup cocok / kurang cocok] untuk peran ini berdasarkan kriteria yang dinilai.
+
 4.  The reasoning should explain the score provided, NOT recalculate anything.
-5.  Keep the reasoning concise and professional.
-6.  Output ONLY the reasoning text as a single string. No JSON, no extra formatting.
+5.  Keep each section concise and professional.
+6.  Output ONLY the reasoning text with the structure above. No JSON, no extra formatting.
+7.  IMPORTANT: Always include blank lines (newlines) between each section for readability.
     """
 
     # Prepare context for the reasoning prompt
     formatted_job_details = format_job_details_for_prompt(job_details) # For context
     formatted_candidate_details = format_candidate_details_for_prompt(candidate_data) # For context
 
-    # Format final score as integer for display (remove decimals for clarity)
-    final_score_display = int(round(reasoning_data['final_score']))
+    # Use the exact final score value (as it appears in aiScore)
+    final_score_display = reasoning_data['final_score']
 
     # Structure the input data clearly for the AI
     reasoning_input_context = f"""
